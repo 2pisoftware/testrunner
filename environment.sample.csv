@@ -1,0 +1,5 @@
+testPath,"C:\inetpub\wwwroot\testrunner\tests"
+testUrl,"http://eek.com"
+testStagingPath,"C:\inetpub\wwwroot\testrunner\staging"
+testOutputPath,"C:\inetpub\wwwroot\testrunner\output"
+codeception,"C:\inetpub\wwwroot\testrunner\composer\bin\codecept"
