@@ -1,6 +1,6 @@
 Test Runner
 <?php
-define('DS', DIRECTORY_SEPARATOR); 
+if (!defined('DS'))  define('DS', DIRECTORY_SEPARATOR);
 
 /**********************************
  * Determine the path to the currently running php script
@@ -33,7 +33,7 @@ require(getScriptFolder().DS.'lib'.DS.'Spyc.php');
 echo " in ". TestConfig::getConfig('testPath');
 //echo "Running all tests in ". TestConfig::getConfig('testPath')."<br>";
 //die();
-
+		
 try {
 	//$cmd = TestConfig::getConfig('testCommand'); //$_GET['command'];
 	$cmd ='run';

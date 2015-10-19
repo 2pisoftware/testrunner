@@ -68,10 +68,10 @@ class FileSystemTools {
 		// cli case
 		if (strlen(trim($argv[0]))>0) {
 			$dir = dirname(getcwd() . DS . $argv[0]);
-			$curDir = getcwd();
-			chdir($dir);
-			$dir = getcwd();
-			chdir($curDir);
+			if (is_dir($dir)) {
+				chdir($dir);
+				$dir = getcwd();
+			}
 		}
 		return $dir;
 	}

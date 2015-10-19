@@ -2,11 +2,11 @@ class_name: AcceptanceGuy
 modules:
   enabled:
     - WebDriver:
-        url: http://google.com
+        url: http://testrunner.steve
         browser: firefox
         window_size: 1024x768
         wait: 10
         capabilities:
           unexpectedAlertBehaviour: accept
     - \Helper\Acceptance
-  
+    - Cli

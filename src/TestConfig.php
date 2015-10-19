@@ -4,10 +4,16 @@
  *****************************/
 
 
+
 class TestConfig {
 	static  $config=null;
 	
-	private static function init() {
+	public static function getConfigs() {
+		TestConfig::init();
+		return self::$config;
+	}
+	
+	public static function init() {
 		if (!is_array(self::$config)) {
 			self::$config=array();
 			// defaults
@@ -38,35 +44,40 @@ class TestConfig {
 			global $argv;
 			// test path
 			$argumentOffset=0;
-			if (strlen(trim($argv[$argumentOffset+1]))>0) {
+			if (array_key_exists($argumentOffset+1,$argv) && strlen(trim($argv[$argumentOffset+1]))>0) {
+				self::$config['testCommand']='';
 				// check for commands as first argument and save
 				if (trim($argv[$argumentOffset+1])=="run") {
 					$argumentOffset=1;
-					self::$config['testCommand']=$argv[$argumentOffset+1];
+					self::$config['testCommand']='run';
 				} else {
 					// default run tests
 					self::$config['testCommand']='run';
 				}
 				self::$config['testPath']=$argv[$argumentOffset+1];
-			} if (strlen(trim($_POST['testPath']))>0) {
+			} else if (array_key_exists('testPath',$_POST) && strlen(trim($_POST['testPath']))>0) {
 				self::$config['testPath']=$_POST['testPath'];
 			}
+			//echo self::$config['testCommand'];
+			//echo self::$config['testPath'];
+			//die();
 			// test suite
-			if (strlen(trim($argv[$argumentOffset+2]))>0) {
+			if (array_key_exists($argumentOffset+2,$argv) && strlen(trim($argv[$argumentOffset+2]))>0) {
 				self::$config['testSuite']=$argv[$argumentOffset+2];
-			} if (strlen(trim($_POST['testSuite']))>0) {
+			} else if (array_key_exists('testSuite',$_POST) && strlen(trim($_POST['testSuite']))>0) {
 				self::$config['testSuite']=$_POST['testSuite'];
 			}
 			// test 
-			if (strlen(trim($argv[$argumentOffset+3]))>0) {
+			if (array_key_exists($argumentOffset+3,$argv) && strlen(trim($argv[$argumentOffset+3]))>0) {
 				self::$config['test']=$argv[$argumentOffset+3];
-			} if (strlen(trim($_POST['test']))>0) {
+			} else if (array_key_exists('test',$_POST) && strlen(trim($_POST['test']))>0) {
 				self::$config['test']=$_POST['test'];
 			}
 			
 			
 			TestConfig::writeCodeceptionConfig();
 			//print_r(self::$config);
+			//die();
 		}
 	}
 	
@@ -90,27 +101,38 @@ class TestConfig {
 	 *****************************************************/
 	public static function getConfig($key) {
 		TestConfig::init();
-		return str_replace('"','',self::$config[$key]);
+		if (array_key_exists($key,self::$config)) {
+			return str_replace('"','',self::$config[$key]);
+		}
 	}
 		
 	static function writeCodeceptionConfig() {
+		print_r(TestConfig::$config);
+		return;
 		// codeception.yml write db parameters
-		$data=Spyc::YAMLLoad(FileSystemTools::getScriptFolder().DS.'codeception.template.yml');
+		$baseFolder=FileSystemTools::getScriptFolder();
+		$data=Spyc::YAMLLoad($baseFolder.DS.'codeception.template.yml');
 		if (!is_array($data)) $data=array();
-		if (!is_array($data['modules'])) $data['modules']=array();
-		if (!is_array($data['modules']['config'])) $data['modules']['config']=array();
-		if (!is_array($data['modules']['config']['Db'])) $data['modules']['config']['Db']=array();
+		if (!array_key_exists('modules',$data)) $data['modules']=array();
+		if (!array_key_exists('config',$data['modules'])) $data['modules']['config']=array();
+		if (!array_key_exists('Db',$data['modules']['config'])) $data['modules']['config']['Db']=array();
 		$data['modules']['config']['Db']['dsn']=(strlen(trim(TestConfig::getConfig('dbDsn')))>0) ? TestConfig::getConfig('dbDsn') : '';
 		$data['modules']['config']['Db']['user']=(strlen(trim(TestConfig::getConfig('dbUser')))>0) ? TestConfig::getConfig('dbUser') : '';
 		$data['modules']['config']['Db']['password']=(strlen(trim(TestConfig::getConfig('dbPassword')))>0) ? TestConfig::getConfig('dbPassword') : '';
 		$yaml = Spyc::YAMLDump($data);
-		file_put_contents(FileSystemTools::getScriptFolder().DS.'codeception.yml',$yaml);
+		echo "<hr>";
+		$codeceptionFile=$baseFolder.DS.'codeception.yml';
+		echo $codeceptionFile;
+		echo "<hr>";
+		//file_put_contents(FileSystemTools::getScriptFolder().DS.'codeception.yml',$yaml);
+		//file_put_contents("C:\\inetpub\\wwwroot\\testrunner\\codeception.yml",$yaml);
+		file_put_contents($codeceptionFile,$yaml);
 	}
 	
 	static function writeWebDriverConfig($configFile) {
 		// write webdriver parameters
 		$data=Spyc::YAMLLoad($configFile);
-		if (is_array($data) && is_array($data['modules']) && is_array($data['modules']['enabled'])&& is_array($data['modules']['enabled']['WebDriver'])) {
+		if (is_array($data) && array_key_exists('modules',$data) && array_key_exists('enabled',$data['modules'])&& array_key_exists('WebDriver',$data['modules']['enabled']) && is_array($data['modules']['enabled']['WebDriver'])) {
 			$data['modules']['enabled']['WebDriver']['url']=(strlen(trim(TestConfig::getConfig('testUrl')))>0) ? TestConfig::getConfig('testUrl') : '';
 			$yaml = Spyc::YAMLDump($data);
 			file_put_contents($configFile,$yaml);

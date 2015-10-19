@@ -1,6 +1,6 @@
 <?php
 namespace Helper;
-define('DS', DIRECTORY_SEPARATOR); 
+if (!defined('DS'))  define('DS', DIRECTORY_SEPARATOR);
 
 // here you can define custom actions
 // all public methods declared in helper class will be available in $I

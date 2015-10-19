@@ -33,16 +33,16 @@ class TestRunnerTest extends \Codeception\TestCase\Test
 	*/
     public function testRunTests()
     {
+		$this->assertTrue(false); // FAIL
 		$this->guy->createTestFolderTree($this->tmpPath1);
 		$this->assertTrue($this->guy->isTestFolderTree($this->tmpPath1));
-		
     }
     
     public function testFindTestFolders()
     {
+		$this->assertTrue(false); // FAIL
 		$this->guy->createTestFolderTree($this->tmpPath1);
 		$this->assertTrue($this->guy->isTestFolderTree($this->tmpPath1));
-		
     }
     
     public function testIsTestSuiteFolder()
