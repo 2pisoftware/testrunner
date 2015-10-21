@@ -5,8 +5,19 @@
         "bin-dir": "composer/bin"
     },
     "require": {
-        "codeception/codeception": "*",
         "site5/phantoman": "^1.0",
-        "monolog/monolog": "^1.17"
-	}
+        "monolog/monolog": "^1.17",
+        "codeception/codeception": "^2.1",
+        "symfony/console": "^2.7",
+        "jakoch/phantomjs-installer": "^2.0",
+        "symfony/yaml": "^2.7"
+	},
+	"scripts": {
+        "post-install-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS"
+        ],
+        "post-update-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS"
+        ]
+    }
 }

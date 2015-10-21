@@ -1,1 +1,2 @@
-php -f index.php %
+@echo off
+php -f index.php %*

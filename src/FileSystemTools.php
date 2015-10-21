@@ -9,6 +9,7 @@ class FileSystemTools {
 	 * @return Array (of copied files)
 	 *****************************/
 	static function copyRecursive( $path,$dest) {
+		echo "copy recursive ".$path."||".$dest;
 		@mkdir( $dest );
 		$tests=array();
 		if( is_dir($path) ) {

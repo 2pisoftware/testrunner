@@ -1,0 +1,5 @@
+testPath,"C:\inetpub\wwwroot\testrunner\tests"
+testUrl,""
+testStagingPath,"C:\TEMP\testrunnerstaging"
+testOutputPath,""
+codeception,""

@@ -8,7 +8,6 @@
 
 class TestRunner {
 	
-	
 	/*****************************
 	 * Recursively scan a folder for test folders containing at least 
 	 * one test suite
@@ -25,8 +24,10 @@ class TestRunner {
 			}
 			// clean up staging
 			FileSystemTools::prune($staging);
+			//copy(TestConfig)
 			// copy test suites etc to staging
 			FileSystemTools::copyRecursive($testFolder,$staging);
+			TestConfig::writeCodeceptionConfig();
 			$objects = glob($staging.DS.'*.suite.yml');
 			if( sizeof($objects) > 0 ) {
 				foreach( $objects as $file ) {
@@ -35,11 +36,12 @@ class TestRunner {
 					TestConfig::writeWebDriverConfig($file);
 				}
 			}
+			echo "HERE";
 			// build and run
 			echo "<pre>";
-			array_push($cmds,TestConfig::getConfig('codeception').' build '.' -c '.FileSystemTools::getScriptFolder());
-			array_push($cmds,TestConfig::getConfig('codeception').' run '.' -c '.FileSystemTools::getScriptFolder());
-			//print_r($cmds);
+			array_push($cmds,TestConfig::getConfig('codeception').' build '.' -c '.dirname($staging));
+			array_push($cmds,TestConfig::getConfig('codeception').' run '.' -c '.dirname($staging).' '.TestConfig::getConfig('testSuite').' '.TestConfig::getConfig('test'));
+			print_r($cmds);
 			foreach ($cmds as $cmd) {
 				$handle = popen($cmd, "r");
 				$detailsTest='';
