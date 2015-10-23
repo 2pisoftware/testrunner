@@ -109,7 +109,7 @@ class FileSystemTools {
 		if (is_dir($dir)) { 
 			$files = array_diff(scandir($dir), array('.','..')); 
 			foreach ($files as $file) { 
-			  (is_dir("$dir/$file")) ? FileSystemTools::rmdirRecursive("$dir/$file") : unlink("$dir/$file"); 
+			  (is_dir($dir.DS.basename($file))) ? FileSystemTools::rmdirRecursive($dir.DS.basename($file)) : unlink($dir.DS.basename($file)); 
 			} 
 			return rmdir($dir); 
 		}

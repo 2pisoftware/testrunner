@@ -1,5 +1,4 @@
 <?php
-echo "eek";
 $output=[];
 $output[]='Test Runner';
 

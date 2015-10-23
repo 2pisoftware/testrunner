@@ -5,13 +5,15 @@ Codeception underpins the test run framework.
 
 It helps with finding and running many test folders across a code base.
 It helps with managing configuration required for running tests. The TestConfig 
-class provides access to a unified configuration tree derived from (in order) defaults, cm5, environment variables and parameters(arguments or GET).
+class provides access to a unified configuration tree derived from (in order) defaults, environment variables and parameters(arguments or GET).
 It helps by iterating discovered test folders to run tests. 
 For each test folder
 - the folder contents are copied to the $testStagingPath directory so test artifacts are not left in the main source tree.
-- the codeception.yml and *.suite.yml are read and rewritten 
+- the codeception.yml and *.suite.yml are read and rewritten using configuration values
 - some of the configuration items are set into environment variables for use in tests
 - the tests matching $testSuite and $test  are run 
+- the output of the test run is copied to a unique folder name inside $testOutputPath
+
 
 !Quickstart
 runtests.bat   -   will run the tests for the TestRunner 
@@ -19,6 +21,7 @@ runtests.bat testPath:c:\inetpub\wwwroot\cmfive  - will look for and run tests i
 runtests.bat env:myDev  - will load configuration from $testRunnerPath/environment.myDev.csv then run tests
 
 runtests.bat can be added to your PATH environment variable and run from anywhere
+alternatively you can install the test runner under a webserver and hit the index.php file. GET variables are used as configuration arguments.
 
 Parameters are tokenised by the first : to match parameter names. Allowed parameters include
 'testPath'  - where to look for test suites.   
@@ -49,6 +52,7 @@ Parameters are tokenised by the first : to match parameter names. Allowed parame
 'env'				- key or path to environment.*.csv file to load values from prior to running test. 
 					These values persist in the environment so subsequent calls to runtests.bat do not need to use the option.
 
+**WARNING when using concurrent sessions of the test runner app, you must make sure that the $testStaging and $testOutput paths are unique to each concurrent session.
 
 !Environment variables
 The test runner can derive its configuration from environment variables.
