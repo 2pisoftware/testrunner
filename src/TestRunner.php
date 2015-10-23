@@ -14,21 +14,20 @@ class TestRunner {
 	 * @return Array (of test file paths)
 	 *****************************/
 	static function runTests($testFolder) {
+		$output=[];
 		// clean staging
 		$cmds=array();
 		$staging=TestConfig::getConfig('testStagingPath');
 		// some sanity checking before pruning
 		if (strlen(trim($staging))>0) {
-			if (!is_dir($staging)) {
-				@mkdir($staging);
-			}
+			@mkdir($staging.DS.'tests',0777,true);
 			// clean up staging
 			FileSystemTools::prune($staging);
 			//copy(TestConfig)
 			// copy test suites etc to staging
-			FileSystemTools::copyRecursive($testFolder,$staging);
+			FileSystemTools::copyRecursive($testFolder,$staging.DS.'tests');
 			TestConfig::writeCodeceptionConfig();
-			$objects = glob($staging.DS.'*.suite.yml');
+			$objects = glob($staging.DS.'tests'.DS.'*.suite.yml');
 			if( sizeof($objects) > 0 ) {
 				foreach( $objects as $file ) {
 					if( $file == "." || $file == ".." )
@@ -36,12 +35,13 @@ class TestRunner {
 					TestConfig::writeWebDriverConfig($file);
 				}
 			}
-			echo "HERE";
 			// build and run
-			echo "<pre>";
-			array_push($cmds,TestConfig::getConfig('codeception').' build '.' -c '.dirname($staging));
-			array_push($cmds,TestConfig::getConfig('codeception').' run '.' -c '.dirname($staging).' '.TestConfig::getConfig('testSuite').' '.TestConfig::getConfig('test'));
-			print_r($cmds);
+			array_push($cmds,TestConfig::getConfig('codeception').' build '.' -c '.$staging);
+			$testParam=TestConfig::getConfig('testSuite');
+			$testParam.=(strlen(trim(TestConfig::getConfig('testSuite')))>0) ? ' '.TestConfig::getConfig('test') : '';
+			array_push($cmds,TestConfig::getConfig('codeception').' run '.' -c '.$staging.' '.$testParam);
+			$output[]='CODECEPTION BUILD/RUN';
+			$output=array_merge($output,$cmds);
 			foreach ($cmds as $cmd) {
 				$handle = popen($cmd, "r");
 				$detailsTest='';
@@ -50,14 +50,14 @@ class TestRunner {
 				while(!feof($handle)) {
 					$buffer = fgets($handle);
 					//$buffer = trim(htmlspecialchars($buffer));
-					echo $buffer;
+					$output[]= trim($buffer);
 				}
 			}
-			echo "</pre>";
 			// save output files
 			$testSuiteName=str_replace(':','_',str_replace(DS,'_',$testFolder));
 			FileSystemTools::copyRecursive($staging.DS.'_output',TestConfig::getConfig('testOutputPath').DS.$testSuiteName);
-		}		
+		}
+		return $output;		
 	}
 	
 	/*****************************

@@ -1,15 +1,88 @@
 <?php 
+require_once('lib'.DIRECTORY_SEPARATOR.'Diff.php');
 /*****************************
  * Tools for working with the file system
  *****************************/
 
 class FileSystemTools {
+	
+	/***************************************
+	 * Return any lines that have been added since the snapshot was taken
+	 * @param $snapshot  - last 30 lines of original file contents
+	 * @param $filepath - $filename to compare contents
+	 ***************************************/
+	static function checkChangesToFile($snapshot,$filepath) {
+		$lines=array();
+		if (is_file($filepath)) {
+			$fileNow=FileSystemTools::tail($filepath,30);
+			if (strlen($fileNow)>0 && strlen($snapshot)>0) {
+				$diff = Diff::compare($snapshot,$fileNow);
+				if (count($diff[Diff::INSERTED])>0) {
+					foreach($diff as $dk =>$dv) {
+						if ($dv[1]==Diff::INSERTED) {
+							if (strlen(trim($dv[0]))>0) $lines[]=$dv[0];
+						}
+					}
+				}
+			}	
+		}
+		return $lines;
+	}
+	
+	
+	/***************************************
+	 * Return tailing lines from a file
+	 * @param $filepath - path to file
+	 * @param $lines - maximum number of  lines to return
+	 * @param $adaptive - adapt the size of each chunk read from a file based on the number of lines requested
+	 * 
+	 ****************************************/
+	static function tail($filepath, $lines = 1, $adaptive = true) {
+		if (file_exists($filepath))  {
+			// Open file
+			$f = @fopen($filepath, "rb");
+			if ($f === false) return false;
+			// Sets buffer size
+			if (!$adaptive) $buffer = 4096;
+			else $buffer = ($lines < 2 ? 64 : ($lines < 10 ? 512 : 4096));
+			// Jump to last character
+			fseek($f, -1, SEEK_END);
+			// Read it and adjust line number if necessary
+			// (Otherwise the result would be wrong if file doesn't end with a blank line)
+			if (fread($f, 1) != "\n") $lines -= 1;
+			// Start reading
+			$output = '';
+			$chunk = '';
+			// While we would like more
+			while (ftell($f) > 0 && $lines >= 0) {
+				// Figure out how far back we should jump
+				$seek = min(ftell($f), $buffer);
+				// Do the jump (backwards, relative to where we are)
+				fseek($f, -$seek, SEEK_CUR);
+				// Read a chunk and prepend it to our output
+				$output = ($chunk = fread($f, $seek)) . $output;
+				// Jump back to where we started reading
+				fseek($f, -mb_strlen($chunk, '8bit'), SEEK_CUR);
+				// Decrease our line counter
+				$lines -= substr_count($chunk, "\n");
+			}
+			// While we have too many lines
+			// (Because of buffer size we might have read too many)
+			while ($lines++ < 0) {
+				// Find first newline and remove all text before that
+				$output = substr($output, strpos($output, "\n") + 1);
+			}
+			// Close file and return
+			fclose($f);
+			return trim($output);
+		}
+	}
+	
 	/*****************************
 	 * Recursively copy a folder to a destination path
 	 * @return Array (of copied files)
 	 *****************************/
 	static function copyRecursive( $path,$dest) {
-		echo "copy recursive ".$path."||".$dest;
 		@mkdir( $dest );
 		$tests=array();
 		if( is_dir($path) ) {
@@ -32,7 +105,7 @@ class FileSystemTools {
 	/*****************************
 	 * Recursively delete a folder
 	 *****************************/
-	function rmdirRecursive($dir) { 
+	static function rmdirRecursive($dir) { 
 		if (is_dir($dir)) { 
 			$files = array_diff(scandir($dir), array('.','..')); 
 			foreach ($files as $file) { 
@@ -44,7 +117,7 @@ class FileSystemTools {
 	/*****************************
 	 * Recursively delete everything inside a folder
 	 *****************************/
-	function prune($dir) { 
+	static function prune($dir) { 
 		if (is_dir($dir)) { 
 			foreach(glob($dir . '/*') as $file)   { 
 				if(is_dir($dir.DS.basename($file))) {
@@ -56,25 +129,4 @@ class FileSystemTools {
 	   } 
 	}
 
-	/**********************************
-	 * Determine the path to the currently running php script
-	 * Normalises the path to allow for the case where getcwd()
-	 * returns the directory the script was called from rather than
-	 * the actual path to the script.
-	 **********************************/
-	function getScriptFolder() {
-		global $argv;
-		// web server case
-		$dir=getcwd();
-		// cli case
-		if (strlen(trim($argv[0]))>0) {
-			$dir = dirname(getcwd() . DS . $argv[0]);
-			if (is_dir($dir)) {
-				chdir($dir);
-				$dir = getcwd();
-			}
-		}
-		return $dir;
-	}
-	
 }

@@ -1,2 +1,2 @@
 @echo off
-php -f index.php %*
+php -f %~dp0\index.php %*

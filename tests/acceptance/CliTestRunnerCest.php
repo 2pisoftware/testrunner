@@ -4,11 +4,17 @@ use \AcceptanceGuy;
 class CliTestRunnerCest
 {
 	var $tmpStaging=DS.'tmp'.DS.'staging';
+	var $path='';
     public function _before(AcceptanceGuy $I)
     {
+		$this->path=getenv('testRunnerPath');
+		require_once($this->path.DS."src".DS."FileSystemTools.php");
+		require_once($this->path.DS."src".DS."TestConfig.php");
+		require_once($this->path.DS."src".DS."TestRunner.php");
+		require($this->path.DS.'composer'.DS.'vendor'.DS.'autoload.php');
 		//FileSystemTools::rmdirRecursive($this->tmpStaging);
-		@mkdir($this->tmpStaging); //,0777,true);
-    }
+		@mkdir($this->tmpStaging,0777,true);
+	}
 
     public function _after(AcceptanceGuy $I)
     {
@@ -16,28 +22,13 @@ class CliTestRunnerCest
 	}
 
     // tests
-    private function tryToTest(AcceptanceGuy $I)
+    public function tryToTest(AcceptanceGuy $I)
     {
 		// need a copy of test folder
-		//FileSystemTools::copyRecursive(TestConfig::getConfig('testPath'),$this->tmpStaging);
+		FileSystemTools::copyRecursive(TestConfig::getConfig('testPath'),$this->tmpStaging);
+		$I->runShellCommand(TestConfig::getConfig('testRunnerPath').DS.'runtests.bat testStagingPath:'.$this->tmpStaging);
 		
-		//echo "<hr>";
-		//echo TestConfig::getConfig('codeception');
-		//echo "<hr>";
-		//echo TestConfig::getConfig('testStagingPath');
-		//echo "<hr>";
-		//echo dirname(TestConfig::getConfig('testStagingPath'));
-		//echo "<hr>";
-		//echo 'php -f '.TestConfig::getConfig('codeception').' run ';
-		//echo "<pre>";
-		TestConfig::init();
-		TestConfig::$config['testStagingPath']=$this->tmpStaging;
-		//$I->runShellCommand('php -f '.TestConfig::getConfig('codeception').' run '.$this->tmpStaging);
-		codecept_debug(TestConfig::$config);
-		//die();
-	
-		//$I->runShellCommand(TestConfig::getConfig('codeception').' run '.dirname(TestConfig::getConfig('testStagingPath')));
-		//$I->seeInShellOutput('Codeception PHP Testing Framework');
+		$I->seeInShellOutput('Codeception PHP Testing Framework');
 		//$I->seeInShellOutput('PhantomJS server stopped');
     }
 }

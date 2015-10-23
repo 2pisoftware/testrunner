@@ -1,0 +1,6 @@
+testPath,"c:\inetpub\wwwroot\cmfive-windowsAdaptation"
+testUrl,"http://cmfive.steve"
+testIncludePath,"c:\inetpub\wwwroot\cmfive-windowsAdaptation"
+testLogFiles,"c:\windows\temp\PHP56ForIISExpress_errors.log"
+testSuite,"unit"
+test,""

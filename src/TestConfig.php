@@ -9,13 +9,11 @@ use Symfony\Component\Yaml\Yaml;
 class TestConfig {
 	static  $config=null;
 	
-	public static function getConfigs() {
-		TestConfig::init();
-		return self::$config;
-	}
+	static $legalParameters=array('testOutputPath','testStagingPath','testPath','testSuite','test','codeception','phantomjs','testIncludePath','testUrl','testLogFiles');
 	
 	public static function init() {
 		if (!is_array(self::$config)) {
+			self::$config=array();
 			TestConfig::_init();
 		}
 	}
@@ -26,20 +24,21 @@ class TestConfig {
 	
 	
 	public static function _init() {
-		self::$config=array();
+		if (!array_key_exists('testRunnerPath',self::$config)) self::$config['testRunnerPath']=dirname(dirname(__FILE__));;
 		// defaults only if there are no existing values from previous init run
-		if (!array_key_exists('testPath',self::$config)) self::$config['testPath']=FileSystemTools::getScriptFolder().DS.'tests';
+		if (!array_key_exists('testPath',self::$config)) self::$config['testPath']=self::$config['testRunnerPath'].DS.'tests';
 		if (!array_key_exists('testSuite',self::$config)) self::$config['testSuite']='';
 		if (!array_key_exists('test',self::$config)) self::$config['test']='';
-		if (!array_key_exists('testStagingPath',self::$config)) self::$config['testStagingPath']=FileSystemTools::getScriptFolder().DS.'staging';
-		if (!array_key_exists('testOutputPath',self::$config)) self::$config['testOutputPath']=FileSystemTools::getScriptFolder().DS.'output';
-		if (!array_key_exists('codeception',self::$config)) self::$config['codeception']=FileSystemTools::getScriptFolder().DS.'composer'.DS.'bin'.DS.'codecept';
-		if (!array_key_exists('phantomjs',self::$config)) self::$config['phantomjs']=trim(FileSystemTools::getScriptFolder().DS.'vendor'.DS.'jakoch'.DS.'phantomjs'.DS.'bin'.DS.'phantomjs'); //'phantomjs\bin\phantomjs'; //
+		if (!array_key_exists('testStagingPath',self::$config)) self::$config['testStagingPath']=self::$config['testRunnerPath'].DS.'staging';
+		if (!array_key_exists('testOutputPath',self::$config)) self::$config['testOutputPath']=self::$config['testRunnerPath'].DS.'output';
+		if (!array_key_exists('codeception',self::$config)) self::$config['codeception']=self::$config['testRunnerPath'].DS.'composer'.DS.'bin'.DS.'codecept';
+		if (!array_key_exists('phantomjs',self::$config)) self::$config['phantomjs']=trim(self::$config['testRunnerPath'].DS.'vendor'.DS.'jakoch'.DS.'phantomjs'.DS.'bin'.DS.'phantomjs'); 
 		// from cm5 if available (AS THIRD HIGHEST PRIORITY)
 		// TODO
 		// from environment variables  (AS SECOND HIGHEST PRIORITY)
 		// what tests to run ?
 		if (strlen(trim(getenv('testPath')))>0)  self::$config['testPath']=getenv('testPath');
+		if (strlen(trim(getenv('testIncludePath')))>0)  self::$config['testIncludePath']=getenv('testIncludePath');
 		if (strlen(trim(getenv('testSuite')))>0)  self::$config['testSuite']=getenv('testSuite');
 		if (strlen(trim(getenv('test')))>0)  self::$config['test']=getenv('test');
 		// db config
@@ -49,6 +48,7 @@ class TestConfig {
 		// acceptance testing URL
 		if (strlen(trim(getenv('testUrl')))>0)  self::$config['testUrl']=getenv('testUrl');
 		// other paths
+		if (strlen(trim(getenv('testLogFiles')))>0)  self::$config['testLogFiles']=getenv('testLogFiles');
 		if (strlen(trim(getenv('testStagingPath')))>0)  self::$config['testStagingPath']=getenv('testStagingPath');
 		if (strlen(trim(getenv('testOutputPath')))>0)  self::$config['testOutputPath']=getenv('testOutputPath');
 		if (strlen(trim(getenv('codeception')))>0)  self::$config['codeception']=getenv('codeception');
@@ -84,15 +84,15 @@ class TestConfig {
 	
 	/******************************************************
 	 * Set a configuration value 
-	 *****************************************************/
+	 ****************************************************
 	public static function setConfig($key,$value) {
 		TestConfig::init();
 		self::$config[$key]=$value;
-	}
+	}*/
 		
 	static function writeCodeceptionConfig() {
 		// codeception.yml write db parameters
-		$baseFolder=FileSystemTools::getScriptFolder();
+		$baseFolder=TestConfig::getConfig('testRunnerPath');
 		//$data=Spyc::YAMLLoad($baseFolder.DS.'codeception.template.yml');
 		$data = Yaml::parse(file_get_contents($baseFolder.DS.'codeception.template.yml'));
 		if (!is_array($data)) $data=array();
@@ -104,16 +104,7 @@ class TestConfig {
 		$data['modules']['config']['Db']['password']=(strlen(trim(TestConfig::getConfig('dbPassword')))>0) ? TestConfig::getConfig('dbPassword') : '';
 		$data['extensions']['config']['Codeception\Extension\Phantoman']['path']=TestConfig::getConfig('phantomjs');
 		$yaml = Yaml::dump($data);
-		//echo "<pre>";
-		//print_r($data);
-		//echo "</pre>";
-		//die();
-		//echo "<hr>";
-		$codeceptionFile=dirname(TestConfig::getConfig('testStagingPath')).DS.'codeception.yml';
-		//echo $codeceptionFile;
-		//echo "<hr>";
-		//file_put_contents(FileSystemTools::getScriptFolder().DS.'codeception.yml',$yaml);
-		//file_put_contents("C:\\inetpub\\wwwroot\\testrunner\\codeception.yml",$yaml);
+		$codeceptionFile=TestConfig::getConfig('testStagingPath').DS.'codeception.yml';
 		file_put_contents($codeceptionFile,$yaml);
 	}
 	

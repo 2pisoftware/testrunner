@@ -3,3 +3,5 @@ composer.lock
 environment.csv
 staging/
 output/
+environment.*.csv
+*.functions.txt

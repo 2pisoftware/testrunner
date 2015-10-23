@@ -1,8 +1,8 @@
 paths:
-    tests: staging
-    log: staging/_output
-    data: staging/_data
-    helpers: staging/_support
+    tests: tests
+    log: tests/_output
+    data: tests/_data
+    helpers: tests/_support
 settings:
     bootstrap: _bootstrap.php
     suite_class: \PHPUnit_Framework_TestSuite
@@ -25,4 +25,4 @@ extensions:
         Codeception\Extension\Recorder:
             delete_successful: true
         Codeception\Extension\Phantoman:
-            path: 'bin/phantomjs'
+            path: ''
