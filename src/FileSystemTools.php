@@ -106,11 +106,23 @@ class FileSystemTools {
 	 * Recursively delete a folder
 	 *****************************/
 	static function rmdirRecursive($dir) { 
+		echo "RMDIR REC ".$dir."\n";
 		if (is_dir($dir)) { 
+			echo "RMDIR REC ISDIR  ".$dir."\n";
 			$files = array_diff(scandir($dir), array('.','..')); 
+			echo "RMDIR REC FILES"."\n";
+			print_r($files);
 			foreach ($files as $file) { 
-			  (is_dir($dir.DS.basename($file))) ? FileSystemTools::rmdirRecursive($dir.DS.basename($file)) : unlink($dir.DS.basename($file)); 
+				echo "RMDIR REC ".$file."\n"; 
+				if (is_dir($dir.DS.basename($file))) {
+					echo "RMDIR REC ITER IS DIR ".$file."\n";
+					FileSystemTools::rmdirRecursive($dir.DS.basename($file)) ;
+				} else { 
+					echo "RMDIR REC ITER IS FILE ".$file."\n";
+					unlink($dir.DS.basename($file)); 
+				}
 			} 
+			echo "RMDIR NOW REMOVE ".$dir."\n";
 			return rmdir($dir); 
 		}
 	}
@@ -118,11 +130,16 @@ class FileSystemTools {
 	 * Recursively delete everything inside a folder
 	 *****************************/
 	static function prune($dir) { 
+		echo "PRUNE ".$dir."\n";
 		if (is_dir($dir)) { 
+			echo "PRUNE IS DIR ".$dir."\n";
 			foreach(glob($dir . '/*') as $file)   { 
+				echo "PRUNE INNER ".$file."\n";
 				if(is_dir($dir.DS.basename($file))) {
+					echo "PRUNE ISDIR  ".$dir.DS.basename($file)."\n";
 					FileSystemTools::rmdirRecursive($dir.DS.basename($file)); 
 				} else {
+					echo "PRUNE IS FILE".$dir.DS.basename($file)."\n";
 					unlink($dir.DS.basename($file));
 				}
 			} 

@@ -55,9 +55,11 @@ Parameters are tokenised by the first : to match parameter names. Allowed parame
 !Environment variables
 The test runner can derive its configuration from environment variables.
 Configuration values can be put into a csv file and loaded into environment variables.
+Once the configuration values are set into local and global environment variables, the IIS web server is restarted so it picks up the changes.
 
 setenvironment.bat steveDev - will load configuration values from $testRunnerPath/environment.steveDev.csv into environment variables
 setenvironment.bat c:\environments\environment.steveDev.csv  will load configuration values from c:\environments\environment.steveDev.csv into environment variables
+
 
 
 !Codeception primer

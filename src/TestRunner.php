@@ -20,12 +20,20 @@ class TestRunner {
 		$staging=TestConfig::getConfig('testStagingPath');
 		// some sanity checking before pruning
 		if (strlen(trim($staging))>0) {
-			@mkdir($staging.DS.'tests',0777,true);
 			// clean up staging
 			FileSystemTools::prune($staging);
-			//copy(TestConfig)
-			// copy test suites etc to staging
+			// create staging location
+			@mkdir($staging.DS.'tests',0777,true);
+			//return;
+			// copy shared test support files
+			FileSystemTools::copyRecursive(TestConfig::getConfig(''),$staging.DS.'_support');
+			// then copy over the top, test suites etc to staging
 			FileSystemTools::copyRecursive($testFolder,$staging.DS.'tests');
+			// ensure required test directories
+			@mkdir($staging.DS.'_support',0777,true);
+			@mkdir($staging.DS.'_output',0777,true);
+			@mkdir($staging.DS.'_data',0777,true);
+			@mkdir($staging.DS.'_support'.DS.'Helper',0777,true);
 			TestConfig::writeCodeceptionConfig();
 			$objects = glob($staging.DS.'tests'.DS.'*.suite.yml');
 			if( sizeof($objects) > 0 ) {

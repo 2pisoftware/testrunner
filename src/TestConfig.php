@@ -30,6 +30,7 @@ class TestConfig {
 		if (!array_key_exists('testSuite',self::$config)) self::$config['testSuite']='';
 		if (!array_key_exists('test',self::$config)) self::$config['test']='';
 		if (!array_key_exists('testStagingPath',self::$config)) self::$config['testStagingPath']=self::$config['testRunnerPath'].DS.'staging';
+		if (!array_key_exists('testSharedSupportPath',self::$config)) self::$config['testSharedSupportPath']=self::$config['testRunnerPath'].DS.'support';
 		if (!array_key_exists('testOutputPath',self::$config)) self::$config['testOutputPath']=self::$config['testRunnerPath'].DS.'output';
 		if (!array_key_exists('codeception',self::$config)) self::$config['codeception']=self::$config['testRunnerPath'].DS.'composer'.DS.'bin'.DS.'codecept';
 		if (!array_key_exists('phantomjs',self::$config)) self::$config['phantomjs']=trim(self::$config['testRunnerPath'].DS.'vendor'.DS.'jakoch'.DS.'phantomjs'.DS.'bin'.DS.'phantomjs'); 
@@ -50,6 +51,7 @@ class TestConfig {
 		// other paths
 		if (strlen(trim(getenv('testLogFiles')))>0)  self::$config['testLogFiles']=getenv('testLogFiles');
 		if (strlen(trim(getenv('testStagingPath')))>0)  self::$config['testStagingPath']=getenv('testStagingPath');
+		if (strlen(trim(getenv('testSharedSupportPath')))>0)  self::$config['testSharedSupportPath']=getenv('testSharedSupportPath');
 		if (strlen(trim(getenv('testOutputPath')))>0)  self::$config['testOutputPath']=getenv('testOutputPath');
 		if (strlen(trim(getenv('codeception')))>0)  self::$config['codeception']=getenv('codeception');
 		if (strlen(trim(getenv('phantomjs')))>0)  self::$config['phantomjs']=getenv('phantomjs');
