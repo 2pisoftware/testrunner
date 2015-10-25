@@ -26,6 +26,7 @@ TestConfig::init();
 TestConfig::$config['testRunnerPath']=$testRunnerPath;
 // handle CLI arguments
 if (php_sapi_name() == 'cli') {
+	/*
 	// check for environment read and do that first
 	foreach($argv as $aKey =>$argument) {
 		$argumentParts=explode(':',$argument);
@@ -39,7 +40,7 @@ if (php_sapi_name() == 'cli') {
 				// print_r(array(exec($testRunnerPath.DS."setenvironment.sh")));
 			}
 		}
-	}
+	}*/
 	// set any legal parameters
 	foreach($argv as $aKey =>$argument) {
 		$argumentParts=explode(':',$argument);
@@ -50,7 +51,8 @@ if (php_sapi_name() == 'cli') {
 	
 // handle POST vars	
 } else {
-	// check environment read first
+	/*
+	 // check environment read first
 	if (array_key_exists('env',$_GET) && strlen(trim($_GET['env']))>0) {
 		if (is_file($testRunnerPath.DS."environment.".trim($_GET['env']).".csv")) {  // load environment variables file
 			if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
@@ -62,6 +64,7 @@ if (php_sapi_name() == 'cli') {
 			}
 		}
 	}
+	*/
 	// set any legal parameters
 	foreach (TestConfig::$legalParameters as $key=>$parameterName) {
 		if (array_key_exists($parameterName,$_GET) && strlen(trim($_GET[$parameterName]))>0) {

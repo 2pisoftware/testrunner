@@ -18,10 +18,10 @@ For each test folder
 !Quickstart
 runtests.bat   -   will run the tests for the TestRunner 
 runtests.bat testPath:c:\inetpub\wwwroot\cmfive  - will look for and run tests in the cmfive source tree
-runtests.bat env:myDev  - will load configuration from $testRunnerPath/environment.myDev.csv then run tests
 
 runtests.bat can be added to your PATH environment variable and run from anywhere
 alternatively you can install the test runner under a webserver and hit the index.php file. GET variables are used as configuration arguments.
+setenvironment.bat can be used to set persistent global environment variables and restart IIS web server. This must be run in a console running as Administrator.
 
 Parameters are tokenised by the first : to match parameter names. Allowed parameters include
 'testPath'  - where to look for test suites.   
@@ -49,8 +49,6 @@ Parameters are tokenised by the first : to match parameter names. Allowed parame
 'codeception'		- command to run codeception  (DEFAULT $testRunnerPath/composer/bin/codeception)
 'phantomjs'			- path to phantomjs binary   (DEFAULT $testRunnerPath/vendor/jakoch/phantomjs/bin)
 
-'env'				- key or path to environment.*.csv file to load values from prior to running test. 
-					These values persist in the environment so subsequent calls to runtests.bat do not need to use the option.
 
 **WARNING when using concurrent sessions of the test runner app, you must make sure that the $testStaging and $testOutput paths are unique to each concurrent session.
 

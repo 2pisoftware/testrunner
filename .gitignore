@@ -5,3 +5,4 @@ staging/
 output/
 environment.*.csv
 *.functions.txt
+phpMyAdmin/
