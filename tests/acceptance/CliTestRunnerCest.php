@@ -22,7 +22,7 @@ class CliTestRunnerCest
 	}
 
     // tests
-    public function tryToTest(AcceptanceGuy $I)
+    private function tryToTest(AcceptanceGuy $I)
     {
 		// need a copy of test folder
 		FileSystemTools::copyRecursive(TestConfig::getConfig('testPath'),$this->tmpStaging);
