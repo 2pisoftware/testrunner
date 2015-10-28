@@ -29,8 +29,10 @@ Parameters are tokenised by the first : to match parameter names. Allowed parame
 
 'testSuite'  - which test suite to run eg acceptance/unit/??? in each of the discovered test folders  
 (DEFAULT empty)
+
 'test'    - which individual test to run eg FileSystemToolsTest:testCopyRecursive. Requires a value for testSuite 
 (DEFAULT empty)
+
 
 'testUrl' - url to use for webdriver config  
 (REQUIRED  for acceptance tests using webdriver)  
@@ -38,15 +40,20 @@ Parameters are tokenised by the first : to match parameter names. Allowed parame
 
 'testOutputPath'	- where output from all test folders and all test suites is collated   
 (DEFAULT $testRunnerPath/output)
+
 'testStagingPath'	- where tests are copied to build and run   
 (DEFAULT $testRunnerPath/staging)
+
 'testIncludePath'	- path set into environment for including source code inside tests. 
 					By using chdir to this path in your test, relative links within an existing code base will work.   
 					(DEFAULT the same as $testPath after parameters unless set otherwise)  
 					** WARNING Because this defaults to $testPath, selection of tests inside the main source tree using $testPath (perhaps as a parameter) will upset the default for this value and it will need to be set explicitly eg runtests.bat testPath:/src/stuff testIncludePath:/src.
+'testSharedSupportPath' - Files in this folder are copied to the staging test support directory before copying test files. Intended for test code that is shared across multiple test folders and test suites.
+
 'testLogFiles'		- comma seperated list of files that should be compared before and after testing. any additions are shown in test output.					
 
 'codeception'		- command to run codeception  (DEFAULT $testRunnerPath/composer/bin/codeception)
+
 'phantomjs'			- path to phantomjs binary   (DEFAULT $testRunnerPath/vendor/jakoch/phantomjs/bin)
 
 
@@ -55,7 +62,10 @@ Parameters are tokenised by the first : to match parameter names. Allowed parame
 !Environment variables
 The test runner can derive its configuration from environment variables.
 Configuration values can be put into a csv file and loaded into environment variables.
-Once the configuration values are set into local and global environment variables, the IIS web server is restarted so it picks up the changes.
+
+If setenvironment.bat is run in a command prompt as Administrator, 
+- the configuration values are set into local and global environment variables, 
+- the IIS web server is restarted so it picks up the changes.
 
 setenvironment.bat steveDev - will load configuration values from $testRunnerPath/environment.steveDev.csv into environment variables
 setenvironment.bat c:\environments\environment.steveDev.csv  will load configuration values from c:\environments\environment.steveDev.csv into environment variables

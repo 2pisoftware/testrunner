@@ -6,3 +6,4 @@ output/
 environment.*.csv
 *.functions.txt
 phpMyAdmin/
+composerdis/

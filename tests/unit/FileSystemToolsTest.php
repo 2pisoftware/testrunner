@@ -7,8 +7,8 @@ class FileSystemToolsTest extends \Codeception\TestCase\Test
      */
     protected $guy;
     
-    public $tmpPath1=DS.'tmp'.DS.'testing1';
-    public $tmpPath2=DS.'tmp'.DS.'testing2';
+    public $tmpPath1=DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'testing1';
+    public $tmpPath2=DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'testing2';
 
     protected function _before()
     {

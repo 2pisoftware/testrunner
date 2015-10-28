@@ -6,6 +6,15 @@ require_once('lib'.DIRECTORY_SEPARATOR.'Diff.php');
 
 class FileSystemTools {
 	
+	
+	
+	static function setPermissionsAllowEveryone($path) {
+	//	echo TestConfig::getConfig('testRunnerPath').DS.'fixfilepermissions.bat '.$path;
+		//die();
+	//	print_r(array('FIX FILE PERMS',$path,exec(TestConfig::getConfig('testRunnerPath').DS.'fixfilepermissions.bat '.$path)));
+		
+	}
+	
 	/***************************************
 	 * Return any lines that have been added since the snapshot was taken
 	 * @param $snapshot  - last 30 lines of original file contents
@@ -83,7 +92,8 @@ class FileSystemTools {
 	 * @return Array (of copied files)
 	 *****************************/
 	static function copyRecursive( $path,$dest) {
-		@mkdir( $dest );
+	//	echo "COPY REC ".$path." to ".$dest."\n";
+		@mkdir( $dest ,0777,true);
 		$tests=array();
 		if( is_dir($path) ) {
 			$objects = scandir($path);
@@ -106,40 +116,42 @@ class FileSystemTools {
 	 * Recursively delete a folder
 	 *****************************/
 	static function rmdirRecursive($dir) { 
-		echo "RMDIR REC ".$dir."\n";
+	//	echo "RMDIR REC ".$dir."\n";
 		if (is_dir($dir)) { 
-			echo "RMDIR REC ISDIR  ".$dir."\n";
+			FileSystemTools::setPermissionsAllowEveryone($dir);
+		
+	//		echo "RMDIR REC ISDIR  ".$dir."\n";
 			$files = array_diff(scandir($dir), array('.','..')); 
-			echo "RMDIR REC FILES"."\n";
-			print_r($files);
+	//		echo "RMDIR REC FILES"."\n";
+	//		print_r($files);
 			foreach ($files as $file) { 
-				echo "RMDIR REC ".$file."\n"; 
+	//			echo "RMDIR REC ".$file."\n"; 
 				if (is_dir($dir.DS.basename($file))) {
-					echo "RMDIR REC ITER IS DIR ".$file."\n";
+	//				echo "RMDIR REC ITER IS DIR ".$file."\n";
 					FileSystemTools::rmdirRecursive($dir.DS.basename($file)) ;
 				} else { 
-					echo "RMDIR REC ITER IS FILE ".$file."\n";
+	//				echo "RMDIR REC ITER IS FILE ".$file."\n";
 					unlink($dir.DS.basename($file)); 
 				}
 			} 
-			echo "RMDIR NOW REMOVE ".$dir."\n";
+	//		echo "RMDIR NOW REMOVE ".$dir."\n";
 			return rmdir($dir); 
 		}
 	}
-	/*****************************
+/*****************************
 	 * Recursively delete everything inside a folder
 	 *****************************/
 	static function prune($dir) { 
-		echo "PRUNE ".$dir."\n";
+	//	echo "PRUNE ".$dir."\n";
 		if (is_dir($dir)) { 
-			echo "PRUNE IS DIR ".$dir."\n";
+		//	echo "PRUNE IS DIR ".$dir."\n";
 			foreach(glob($dir . '/*') as $file)   { 
-				echo "PRUNE INNER ".$file."\n";
+			//	echo "PRUNE INNER ".$file."\n";
 				if(is_dir($dir.DS.basename($file))) {
-					echo "PRUNE ISDIR  ".$dir.DS.basename($file)."\n";
+				//	echo "PRUNE ISDIR  ".$dir.DS.basename($file)."\n";
 					FileSystemTools::rmdirRecursive($dir.DS.basename($file)); 
 				} else {
-					echo "PRUNE IS FILE".$dir.DS.basename($file)."\n";
+					//echo "PRUNE IS FILE".$dir.DS.basename($file)."\n";
 					unlink($dir.DS.basename($file));
 				}
 			} 

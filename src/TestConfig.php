@@ -24,16 +24,16 @@ class TestConfig {
 	
 	
 	public static function _init() {
-		if (!array_key_exists('testRunnerPath',self::$config)) self::$config['testRunnerPath']=dirname(dirname(__FILE__));;
+		if (!array_key_exists('testRunnerPath',self::$config) || empty(self::$config['testRunnerPath'])) self::$config['testRunnerPath']=dirname(dirname(__FILE__));;
 		// defaults only if there are no existing values from previous init run
-		if (!array_key_exists('testPath',self::$config)) self::$config['testPath']=self::$config['testRunnerPath'].DS.'tests';
+		if (!array_key_exists('testPath',self::$config) || empty(self::$config['testPath'])) self::$config['testPath']=self::$config['testRunnerPath'].DS.'tests';
 		if (!array_key_exists('testSuite',self::$config)) self::$config['testSuite']='';
 		if (!array_key_exists('test',self::$config)) self::$config['test']='';
-		if (!array_key_exists('testStagingPath',self::$config)) self::$config['testStagingPath']=self::$config['testRunnerPath'].DS.'staging';
-		if (!array_key_exists('testSharedSupportPath',self::$config)) self::$config['testSharedSupportPath']=self::$config['testRunnerPath'].DS.'support';
-		if (!array_key_exists('testOutputPath',self::$config)) self::$config['testOutputPath']=self::$config['testRunnerPath'].DS.'output';
-		if (!array_key_exists('codeception',self::$config)) self::$config['codeception']=self::$config['testRunnerPath'].DS.'composer'.DS.'bin'.DS.'codecept';
-		if (!array_key_exists('phantomjs',self::$config)) self::$config['phantomjs']=trim(self::$config['testRunnerPath'].DS.'vendor'.DS.'jakoch'.DS.'phantomjs'.DS.'bin'.DS.'phantomjs'); 
+		if (!array_key_exists('testStagingPath',self::$config) || empty(self::$config['testStagingPath'])) self::$config['testStagingPath']=self::$config['testRunnerPath'].DS.'staging';
+		if (!array_key_exists('testSharedSupportPath',self::$config) || empty(self::$config['testSharedSupportPath'])) self::$config['testSharedSupportPath']=self::$config['testRunnerPath'].DS.'support';
+		if (!array_key_exists('testOutputPath',self::$config) || empty(self::$config['testOutputPath'])) self::$config['testOutputPath']=self::$config['testRunnerPath'].DS.'output';
+		if (!array_key_exists('codeception',self::$config) || empty(self::$config['codeception'])) self::$config['codeception']=self::$config['testRunnerPath'].DS.'composer'.DS.'bin'.DS.'codecept';
+		if (!array_key_exists('phantomjs',self::$config) || empty(self::$config['phantomjs'])) self::$config['phantomjs']=trim(self::$config['testRunnerPath'].DS.'vendor'.DS.'jakoch'.DS.'phantomjs'.DS.'bin'.DS.'phantomjs'); 
 		// from cm5 if available (AS THIRD HIGHEST PRIORITY)
 		// TODO
 		// from environment variables  (AS SECOND HIGHEST PRIORITY)
@@ -113,12 +113,18 @@ class TestConfig {
 	static function writeWebDriverConfig($configFile) {
 		// write webdriver parameters
 		$data=Yaml::parse(file_get_contents($configFile));
-		if (is_array($data) && array_key_exists('modules',$data) && array_key_exists('enabled',$data['modules'])&& array_key_exists('WebDriver',$data['modules']['enabled']) && is_array($data['modules']['enabled']['WebDriver'])) {
-			$data['modules']['enabled']['WebDriver']['url']=(strlen(trim(TestConfig::getConfig('testUrl')))>0) ? TestConfig::getConfig('testUrl') : '';
-			$yaml = Yaml::dump($data);
-			file_put_contents($configFile,$yaml);
+		// PROBLEM IN IF STATEMENT BELOW CHECKING FOR WEBDRIVER WHICH IS ACTUALLY A KEY ONE LEVEL DEEPER INSIDE ONE OF?? NUMERIC KEYS
+		if (is_array($data) && array_key_exists('modules',$data) && array_key_exists('enabled',$data['modules']) ) {
+			// && is_array($data['modules']['enabled']['WebDriver']
+			foreach ($data['modules']['enabled'] as $k=>$moduleName) {
+				if (is_array($moduleName) && array_key_exists('WebDriver',$moduleName)) { 
+					$data['modules']['enabled'][$k]['WebDriver']['url']=(strlen(trim(TestConfig::getConfig('testUrl')))>0) ? TestConfig::getConfig('testUrl') : '';
+					$yaml = Yaml::dump($data);
+					file_put_contents($configFile,$yaml);
+					break;
+				}
+			}
 		}
-		
 	}
 	
 	

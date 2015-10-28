@@ -18,22 +18,28 @@ class TestRunner {
 		// clean staging
 		$cmds=array();
 		$staging=TestConfig::getConfig('testStagingPath');
+		//FileSystemTools::setPermissionsAllowEveryone($staging);
+		//FileSystemTools::setPermissionsAllowEveryone(TestConfig::getConfig('testOutputPath'));
+		$passedAllTests=true;
+			
 		// some sanity checking before pruning
 		if (strlen(trim($staging))>0) {
 			// clean up staging
 			FileSystemTools::prune($staging);
+			//return array();
 			// create staging location
 			@mkdir($staging.DS.'tests',0777,true);
-			//return;
+			@mkdir($staging.DS.'tests'.DS.'_support',0777,true);
 			// copy shared test support files
-			FileSystemTools::copyRecursive(TestConfig::getConfig(''),$staging.DS.'_support');
+			FileSystemTools::copyRecursive(TestConfig::getConfig('testSharedSupportPath'),$staging.DS.'tests'.DS.'_support');
+			//return array();
 			// then copy over the top, test suites etc to staging
 			FileSystemTools::copyRecursive($testFolder,$staging.DS.'tests');
 			// ensure required test directories
-			@mkdir($staging.DS.'_support',0777,true);
-			@mkdir($staging.DS.'_output',0777,true);
-			@mkdir($staging.DS.'_data',0777,true);
-			@mkdir($staging.DS.'_support'.DS.'Helper',0777,true);
+			@mkdir($staging.DS.'tests'.DS.'_support',0777,true);
+			@mkdir($staging.DS.'tests'.DS.'_output',0777,true);
+			@mkdir($staging.DS.'tests'.DS.'_data',0777,true);
+			@mkdir($staging.DS.'tests'.DS.'_support'.DS.'Helper',0777,true);
 			TestConfig::writeCodeceptionConfig();
 			$objects = glob($staging.DS.'tests'.DS.'*.suite.yml');
 			if( sizeof($objects) > 0 ) {
@@ -50,6 +56,11 @@ class TestRunner {
 			array_push($cmds,TestConfig::getConfig('codeception').' run '.' -c '.$staging.' '.$testParam);
 			$output[]='CODECEPTION BUILD/RUN';
 			$output=array_merge($output,$cmds);
+			if (php_sapi_name() == 'cli') {
+				echo implode("\n",$output)."\n";
+				$output=array();
+			}
+
 			foreach ($cmds as $cmd) {
 				$handle = popen($cmd, "r");
 				$detailsTest='';
@@ -58,14 +69,23 @@ class TestRunner {
 				while(!feof($handle)) {
 					$buffer = fgets($handle);
 					//$buffer = trim(htmlspecialchars($buffer));
-					$output[]= trim($buffer);
+					if (php_sapi_name() == 'cli') {
+						echo $buffer;
+					} else {
+						$output[]= trim($buffer);
+					}
 				}
+				$exitCode=pclose($handle);
+				if ($exitCode>0) $passedAllTests=false; 
 			}
 			// save output files
 			$testSuiteName=str_replace(':','_',str_replace(DS,'_',$testFolder));
 			FileSystemTools::copyRecursive($staging.DS.'_output',TestConfig::getConfig('testOutputPath').DS.$testSuiteName);
 		}
-		return $output;		
+		//FileSystemTools::setPermissionsAllowEveryone($staging);
+		//FileSystemTools::setPermissionsAllowEveryone(TestConfig::getConfig('testOutputPath'));
+		
+		return array('output'=>$output,'result'=>$passedAllTests);		
 	}
 	
 	/*****************************
