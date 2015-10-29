@@ -67,8 +67,12 @@ If setenvironment.bat is run in a command prompt as Administrator,
 - the configuration values are set into local and global environment variables, 
 - the IIS web server is restarted so it picks up the changes.
 
+
 setenvironment.bat steveDev - will load configuration values from $testRunnerPath/environment.steveDev.csv into environment variables
 setenvironment.bat c:\environments\environment.steveDev.csv  will load configuration values from c:\environments\environment.steveDev.csv into environment variables
+
+!! WARNING on linux run as
+source setenvironment.sh  <environment>
 
 
 

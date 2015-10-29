@@ -50,45 +50,6 @@ class CmFiveTestHelper extends \Codeception\Module
 	}
 	
 	/**
-	 * Create a new user group
-	 */
-	public function createUserGroup($I,$title) {
-		$I->click('List Groups');
-		$I->click('New Group');
-		$I->fillField('#title',$title);
-		$I->click('Save');
-		$I->see('New group added');
-		$I->seeLink($title);
-	}
-	
-	/**
-	 * Delete a user group matching $title
-	 */
-	public function deleteUserGroup($I,$title) {
-		$actionCompleted=false; // make sure we do find the user
-		$I->click('List Groups');
-		$titles=$I->grabMultiple('.tablesorter tbody tr td:nth-child(1)');
-		//codecept_debug(array('got'=>'users'));
-		//codecept_debug($usernames);
-		if (is_array($titless))  {
-			foreach ($titles as  $k=>$u) {
-				if (trim($u)==trim($title)) {
-					$index=$k + 1;
-					$button=".tablesorter tbody tr:nth-child(". $index .")";
-					// disable confirm
-					$I->executeJS('window.confirm = function(){return true;}');
-					$I->click('Delete',$button);
-					$I->see('Group is deleted');
-					$I->dontSeeLink($title);
-					$actionCompleted=true;
-				}
-			}
-		}
-		$I->assertTrue($actionCompleted);
-	}
-	
-	
-	/**
 	 * Delete a user matching $username
 	 */
 	public function deleteUser($I,$username) {
@@ -159,7 +120,7 @@ class CmFiveTestHelper extends \Codeception\Module
 				$button=".tablesorter tbody tr:nth-child(". $index .")";
 				if (trim($u)==trim($username)) {
 					$I->click("Edit",$button);
-					$this->fillForm($data);
+					$this->fillForm($I,$data);
 					$I->click('Save');
 					$actionCompleted=true;
 				}
@@ -168,6 +129,44 @@ class CmFiveTestHelper extends \Codeception\Module
 		$I->assertTrue($actionCompleted);
 	} 
 
+	/**
+	 * Create a new user group
+	 */
+	public function createUserGroup($I,$title) {
+		$I->click('List Groups');
+		$I->click('New Group');
+		$I->fillField('#title',$title);
+		$I->click('Save');
+		$I->see('New group added');
+		$I->seeLink($title);
+	}
+	
+	/**
+	 * Delete a user group matching $title
+	 */
+	public function deleteUserGroup($I,$title) {
+		$actionCompleted=false; // make sure we do find the user
+		$I->click('List Groups');
+		$titles=$I->grabMultiple('.tablesorter tbody tr td:nth-child(1)');
+		//codecept_debug(array('got'=>'users'));
+		//codecept_debug($usernames);
+		if (is_array($titles))  {
+			foreach ($titles as  $k=>$u) {
+				if (trim($u)==trim($title)) {
+					$index=$k + 1;
+					$button=".tablesorter tbody tr:nth-child(". $index .")";
+					// disable confirm
+					$I->executeJS('window.confirm = function(){return true;}');
+					$I->click('Delete',$button);
+					$I->see('Group is deleted');
+					$I->dontSeeLink($title);
+					$actionCompleted=true;
+				}
+			}
+		}
+		$I->assertTrue($actionCompleted);
+	}
+	
 	/**
 	 * Update a user matching $username
 	 */
@@ -181,7 +180,7 @@ class CmFiveTestHelper extends \Codeception\Module
 				$button=".tablesorter tbody tr:nth-child(". $index .")";
 				if (trim($u)==trim($oldTitle)) {
 					$I->click($u);
-					$this->fillField('title',$newTitle);
+					$I->fillField('#title',$newTitle);
 					$I->click('Save');
 					$actionCompleted=true;
 				}
@@ -190,8 +189,9 @@ class CmFiveTestHelper extends \Codeception\Module
 		$I->assertTrue($actionCompleted);
 	} 
 
+	
 	 
-	public function fillForm($data) {
+	public function fillForm($I,$data) {
 		if (is_array($data)) {
 			foreach ($data as $fieldName=>$fieldValue) {
 				$fieldNameParts=explode(':',$fieldName);
