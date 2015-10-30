@@ -24,7 +24,7 @@ class TestConfig {
 	
 	
 	public static function _init() {
-		if (!array_key_exists('testRunnerPath',self::$config) || empty(self::$config['testRunnerPath'])) self::$config['testRunnerPath']=dirname(dirname(__FILE__));;
+		if (!array_key_exists('testRunnerPath',self::$config) || empty(self::$config['testRunnerPath'])) self::$config['testRunnerPath']=dirname(dirname(__FILE__));
 		// defaults only if there are no existing values from previous init run
 		if (!array_key_exists('testPath',self::$config) || empty(self::$config['testPath'])) self::$config['testPath']=self::$config['testRunnerPath'].DS.'tests';
 		if (!array_key_exists('testSuite',self::$config)) self::$config['testSuite']='';

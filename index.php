@@ -1,4 +1,5 @@
 <?php
+
 $output=[];
 $output[]='Test Runner';
 
@@ -23,7 +24,6 @@ if (php_sapi_name() == 'cli') {
 			TestConfig::$config[$argumentParts[0]]=implode(':',array_slice($argumentParts,1));
 		}
 	}
-	
 // handle POST vars	
 } else {
 	// set any legal parameters
@@ -35,19 +35,36 @@ if (php_sapi_name() == 'cli') {
 }
 // if no include path set, use source search path
 if (!array_key_exists('testIncludePath',TestConfig::$config)) TestConfig::$config['testIncludePath']=TestConfig::$config['testPath'];
+// ensure http[s]:// in testUrl
+if (array_key_exists('testUrl',TestConfig::$config) && !(substr(TestConfig::$config['testUrl'],0,7)=='http://' || substr(TestConfig::$config['testUrl'],0,8)=='https://' ) ) {
+	TestConfig::$config['testUrl']='http://'.TestConfig::$config['testUrl'];
+}
 		
 putenv('thisTestRun_testRunnerPath='.$testRunnerPath);
 putenv('thisTestRun_testIncludePath='.TestConfig::getConfig('testIncludePath'));
 
-$output[]="CONFIGURATION ";
+// install CM5 - config and database
+$output[]="INSTALL CMFIVE";
+require($testRunnerPath.DS.'src'.DS.'CmFiveInstaller.php');
+
+$output[]="TEST CONFIGURATION ";
 foreach (TestConfig::$config as $k=>$v) {
 	$output[]=$k."=".$v;
 }
+if (!empty($config['cmFivePath'])) {
+	$output[]="APACHE VHOST CONFIGURATION ";
+	$output[]='<VirtualHost * >';
+	$output[]="ServerName  ".TestConfig::$config['testUrl'];
+	// set in CmFiveInstaller
+	$output[]="DocumentRoot ".$config['cmFivePath'];
+	$output[]="ErrorLog ".$config['testLogFiles']; 
+	$output[]='</VirtualHost>';
+}
+// DUMP OUTPUT
 if (php_sapi_name() == 'cli') {
 	echo implode("\n",$output);
 	$output=array();
 }
-// RUN TESTS
 // clean combined output path
 FileSystemTools::prune(TestConfig::getConfig('testOutputPath'));
 // find all test folders
@@ -58,6 +75,7 @@ $testFolders=TestRunner::findTestFolders(TestConfig::getConfig('testPath'));
 foreach ($testFolders as $k=>$v) {
 	$output[]=$v;
 }
+// DUMP OUTPUT
 if (php_sapi_name() == 'cli') {
 	echo "\n".implode("\n",$output)."\n";
 	$output=array();

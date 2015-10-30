@@ -78,3 +78,15 @@ source setenvironment.sh  <environment>
 
 !Codeception primer
 
+
+
+* bugs
+NOTE - need to install vhost settings for linux
+
+
+ensure http:// on testUrl
+BUGFIx sample file cmFivePath is correct name
+rm config cache items as test runs
+create database from env vars inside  installCmFive
+setenvironment.sh needs check for missing parameter
+
