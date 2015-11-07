@@ -3,7 +3,7 @@ IF [%1]==[] GOTO error
 
 
 rem check for admin permissions
-%~dp0\bin\psexec.exe -h ipconfig
+%~dp0\bin\PsExec.exe -h ipconfig
 set isAdmin=0
 echo ERR %ERRORLEVEL%
 IF %ERRORLEVEL% EQU 0 (

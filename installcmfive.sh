@@ -1,2 +1,2 @@
 DIR=`dirname $0`
-php -f $DIR/installCmFive.php $@
+php -f $DIR/src/CmFiveInstaller.php install $@

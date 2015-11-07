@@ -49,20 +49,29 @@ class TestRunner {
 					TestConfig::writeWebDriverConfig($file);
 				}
 			}
+			// copy installer sql to test data directory
+			if (strlen(trim(TestConfig::getConfig('cmFivePath')))>0)  {
+				copy(TestConfig::getConfig('cmFivePath').DS.'cache'.DS.'install.sql',$staging.DS.'tests'.DS.'_data'.DS.'dump.sql');
+			}
 			// build and run
-			array_push($cmds,TestConfig::getConfig('codeception').' build '.' -c '.$staging);
+			array_push($cmds,array('CODECEPTION BUILD',TestConfig::getConfig('codeception').' build '.' -c '.$staging));
 			$testParam=TestConfig::getConfig('testSuite');
 			$testParam.=(strlen(trim(TestConfig::getConfig('testSuite')))>0) ? ' '.TestConfig::getConfig('test') : '';
-			array_push($cmds,TestConfig::getConfig('codeception').' run '.' -c '.$staging.' '.$testParam);
-			$output[]='CODECEPTION BUILD/RUN';
-			$output=array_merge($output,$cmds);
-			if (php_sapi_name() == 'cli') {
-				echo implode("\n",$output)."\n";
-				$output=array();
-			}
-
+			array_push($cmds,array('CODECEPTION RUN',TestConfig::getConfig('codeception').' run '.' -c '.$staging.' '.$testParam));
+			
 			foreach ($cmds as $cmd) {
-				$handle = popen($cmd, "r");
+				if (php_sapi_name() == 'cli') {
+					echo "-------------------------------------------------\n";
+					echo $cmd[0]."\n";
+					echo $cmd[1]."\n";
+					echo "-------------------------------------------------\n";
+				} else {
+					$output[]="-------------------------------------------------";
+					$output[]=$cmd[0];
+					$output[]=$cmd[1];
+					$output[]="-------------------------------------------------";
+				}
+				$handle = popen($cmd[1], "r");
 				$detailsTest='';
 				$errorActive=false;
 				$testType='';

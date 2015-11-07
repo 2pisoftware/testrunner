@@ -44,22 +44,31 @@ putenv('thisTestRun_testRunnerPath='.$testRunnerPath);
 putenv('thisTestRun_testIncludePath='.TestConfig::getConfig('testIncludePath'));
 
 // install CM5 - config and database
-$output[]="INSTALL CMFIVE";
-require($testRunnerPath.DS.'src'.DS.'CmFiveInstaller.php');
-
+$output[]="-------------------------------------------------";
 $output[]="TEST CONFIGURATION ";
+$output[]="-------------------------------------------------";
 foreach (TestConfig::$config as $k=>$v) {
 	$output[]=$k."=".$v;
 }
-if (!empty($config['cmFivePath'])) {
+if (!empty(TestConfig::$config['cmFivePath'])) {
+	$output[]="-------------------------------------------------";
 	$output[]="APACHE VHOST CONFIGURATION ";
+	$output[]="-------------------------------------------------";
 	$output[]='<VirtualHost * >';
 	$output[]="ServerName  ".TestConfig::$config['testUrl'];
 	// set in CmFiveInstaller
 	$output[]="DocumentRoot ".$config['cmFivePath'];
-	$output[]="ErrorLog ".$config['testLogFiles']; 
+	$output[]="ErrorLog ".TestConfig::$config['testLogFiles']; 
 	$output[]='</VirtualHost>';
+	$output[]="-------------------------------------------------";
 }
+require($testRunnerPath.DS.'src'.DS.'CmFiveInstaller.php');
+$installer= new CmFiveInstaller();
+$installer->install(TestConfig::$config);
+$output[]="-------------------------------------------------";
+$output[]="INSTALLED CMFIVE";
+$output[]="-------------------------------------------------";
+
 // DUMP OUTPUT
 if (php_sapi_name() == 'cli') {
 	echo implode("\n",$output);
@@ -68,13 +77,15 @@ if (php_sapi_name() == 'cli') {
 // clean combined output path
 FileSystemTools::prune(TestConfig::getConfig('testOutputPath'));
 // find all test folders
+$output[]="-------------------------------------------------";
 $output[]="FOUND TEST FOLDERS";
+$output[]="-------------------------------------------------";
 $testFolders=TestRunner::findTestFolders(TestConfig::getConfig('testPath'));
-
 // show all test folders
 foreach ($testFolders as $k=>$v) {
 	$output[]=$v;
 }
+$output[]="-------------------------------------------------";
 // DUMP OUTPUT
 if (php_sapi_name() == 'cli') {
 	echo "\n".implode("\n",$output)."\n";
@@ -99,8 +110,11 @@ foreach( $testFolders as $key=>$folder) {
 		foreach (explode(",",TestConfig::getConfig('testLogFiles')) as $k => $logFile) {
 			$lines=FileSystemTools::checkChangesToFile($snapshots[$logFile],$logFile);
 			if (count($lines)>0)  {
+				$output[]="-------------------------------------------------";
 				$output[]='LOG FILE '.$logFile;
+				$output[]="-------------------------------------------------";
 				$output=array_merge($output,$lines);
+				$output[]="-------------------------------------------------";
 			}
 
 		}

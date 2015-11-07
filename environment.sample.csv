@@ -9,9 +9,5 @@ driver,mysql
 hostname,localhost
 username,root
 password,
-database,cmfivethetest
-adminUsername,admin
-adminPassword,admin
-adminFirstName,Adminy
-adminLastName,Administratorous
-adminEmail,adminy@orus.com
+database,cmfive
+

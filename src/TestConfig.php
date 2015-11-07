@@ -9,7 +9,7 @@ use Symfony\Component\Yaml\Yaml;
 class TestConfig {
 	static  $config=null;
 	
-	static $legalParameters=array('testOutputPath','testStagingPath','testPath','testSuite','test','codeception','phantomjs','testIncludePath','testUrl','testLogFiles');
+	static $legalParameters=array('testOutputPath','testStagingPath','testPath','testSuite','test','codeception','phantomjs','testIncludePath','testUrl','testLogFiles','cmFivePath','port','driver','hostname','username','password','database');
 	
 	public static function init() {
 		if (!is_array(self::$config)) {
@@ -33,7 +33,7 @@ class TestConfig {
 		if (!array_key_exists('testSharedSupportPath',self::$config) || empty(self::$config['testSharedSupportPath'])) self::$config['testSharedSupportPath']=self::$config['testRunnerPath'].DS.'support';
 		if (!array_key_exists('testOutputPath',self::$config) || empty(self::$config['testOutputPath'])) self::$config['testOutputPath']=self::$config['testRunnerPath'].DS.'output';
 		if (!array_key_exists('codeception',self::$config) || empty(self::$config['codeception'])) self::$config['codeception']=self::$config['testRunnerPath'].DS.'composer'.DS.'bin'.DS.'codecept';
-		if (!array_key_exists('phantomjs',self::$config) || empty(self::$config['phantomjs'])) self::$config['phantomjs']=trim(self::$config['testRunnerPath'].DS.'vendor'.DS.'jakoch'.DS.'phantomjs'.DS.'bin'.DS.'phantomjs'); 
+		if (!array_key_exists('phantomjs',self::$config) || empty(self::$config['phantomjs'])) self::$config['phantomjs']=trim(self::$config['testRunnerPath'].DS.'composer'.DS.'bin'.DS.'phantomjs'); 
 		// from cm5 if available (AS THIRD HIGHEST PRIORITY)
 		// TODO
 		// from environment variables  (AS SECOND HIGHEST PRIORITY)
@@ -43,12 +43,16 @@ class TestConfig {
 		if (strlen(trim(getenv('testSuite')))>0)  self::$config['testSuite']=getenv('testSuite');
 		if (strlen(trim(getenv('test')))>0)  self::$config['test']=getenv('test');
 		// db config
-		if (strlen(trim(getenv('dbDsn')))>0)  self::$config['dbDsn']=getenv('dbDsn');
-		if (strlen(trim(getenv('dbUser')))>0)  self::$config['dbUser']=getenv('dbUser');
-		if (strlen(trim(getenv('dbPassword')))>0)  self::$config['dbPassword']=getenv('dbPassword');
+		if (strlen(trim(getenv('port')))>0)  self::$config['port']=getenv('port');
+		if (strlen(trim(getenv('driver')))>0)  self::$config['driver']=getenv('driver');
+		if (strlen(trim(getenv('hostname')))>0)  self::$config['hostname']=getenv('hostname');
+		if (strlen(trim(getenv('username')))>0)  self::$config['username']=getenv('username');
+		if (strlen(trim(getenv('password')))>0)  self::$config['password']=getenv('password');
+		if (strlen(trim(getenv('database')))>0)  self::$config['database']=getenv('database');
 		// acceptance testing URL
 		if (strlen(trim(getenv('testUrl')))>0)  self::$config['testUrl']=getenv('testUrl');
 		// other paths
+		if (strlen(trim(getenv('cmFivePath')))>0)  self::$config['cmFivePath']=getenv('cmFivePath');
 		if (strlen(trim(getenv('testLogFiles')))>0)  self::$config['testLogFiles']=getenv('testLogFiles');
 		if (strlen(trim(getenv('testStagingPath')))>0)  self::$config['testStagingPath']=getenv('testStagingPath');
 		if (strlen(trim(getenv('testSharedSupportPath')))>0)  self::$config['testSharedSupportPath']=getenv('testSharedSupportPath');
@@ -95,17 +99,25 @@ class TestConfig {
 	static function writeCodeceptionConfig() {
 		// codeception.yml write db parameters
 		$baseFolder=TestConfig::getConfig('testRunnerPath');
-		//$data=Spyc::YAMLLoad($baseFolder.DS.'codeception.template.yml');
-		$data = Yaml::parse(file_get_contents($baseFolder.DS.'codeception.template.yml'));
-		if (!is_array($data)) $data=array();
-		if (!array_key_exists('modules',$data)) $data['modules']=array();
-		if (!array_key_exists('config',$data['modules'])) $data['modules']['config']=array();
-		if (!array_key_exists('Db',$data['modules']['config'])) $data['modules']['config']['Db']=array();
-		$data['modules']['config']['Db']['dsn']=(strlen(trim(TestConfig::getConfig('dbDsn')))>0) ? TestConfig::getConfig('dbDsn') : '';
-		$data['modules']['config']['Db']['user']=(strlen(trim(TestConfig::getConfig('dbUser')))>0) ? TestConfig::getConfig('dbUser') : '';
-		$data['modules']['config']['Db']['password']=(strlen(trim(TestConfig::getConfig('dbPassword')))>0) ? TestConfig::getConfig('dbPassword') : '';
-		$data['extensions']['config']['Codeception\Extension\Phantoman']['path']=TestConfig::getConfig('phantomjs');
-		$yaml = Yaml::dump($data);
+		// load template
+		$yaml=file_get_contents($baseFolder.DS.'codeception.template.yml');
+		$data = Yaml::parse($yaml);
+		// ensure structure in template array
+		if (is_array($data)) {
+			//if (!array_key_exists('modules',$data)) $data['modules']=array();
+			//if (!array_key_exists('enabled',$data['modules'])) $data['modules']['enabled']=array();
+			//if (!array_key_exists('Db',$data['modules']['enabled'])) $data['modules']['enabled']['Db']=array();
+			// set db connection details
+			$portNumber=TestConfig::getConfig('port');
+			$port = isset($portNumber) && !empty($portNumber) ? ";port=".$portNumber : "";
+			$url = TestConfig::getConfig('driver').":host=".TestConfig::getConfig('hostname').";dbname=".TestConfig::getConfig('database').$port;
+	   
+			$data['modules']['config']['Db']['dsn']=$url;
+			$data['modules']['config']['Db']['user']=(strlen(trim(TestConfig::getConfig('username')))>0) ? TestConfig::getConfig('username') : '';
+			$data['modules']['config']['Db']['password']=(strlen(trim(TestConfig::getConfig('password')))>0) ? TestConfig::getConfig('password') : '';
+			$data['extensions']['config']['Codeception\Extension\Phantoman']['path']=TestConfig::getConfig('phantomjs');
+			$yaml = Yaml::dump($data);
+		}
 		$codeceptionFile=TestConfig::getConfig('testStagingPath').DS.'codeception.yml';
 		file_put_contents($codeceptionFile,$yaml);
 	}

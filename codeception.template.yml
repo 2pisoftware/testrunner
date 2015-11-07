@@ -5,18 +5,19 @@ paths:
     helpers: tests/_support
 settings:
     bootstrap: _bootstrap.php
-    suite_class: \PHPUnit_Framework_TestSuite
     colors: false
     memory_limit: 1024M
     log: true
 modules:
     config:
         Db:
-            dsn: 'mysql:host=localhost;dbname=disabled'
+            dsn: 'mysql:host=localhost;dbname=cmfivethetesting'
             user: 'root'
             password: ''
-            populate: false
-            cleanup: false
+            dump: 'tests/_data/dump.sql'
+            populate: true
+            cleanup: true
+            reconnect: true
 extensions:
     enabled: 
         - Codeception\Extension\Logger
@@ -26,4 +27,5 @@ extensions:
         Codeception\Extension\Recorder:
             delete_successful: false
         Codeception\Extension\Phantoman:
-            path: ''
+            path: \inetpub\wwwroot\testrunner\composer\bin\phantomjs
+ 
