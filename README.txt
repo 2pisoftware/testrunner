@@ -129,7 +129,8 @@ In your tests use $I->wait(3)
 OR 
 $I->waitForElementVisible('#cmfive-modal .savebutton',5);
 
-
+-- How do I debug my tests?
+codecept_debug($anyValueHere);
 
 
 
