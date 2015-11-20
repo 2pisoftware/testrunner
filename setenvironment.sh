@@ -28,9 +28,9 @@ else
 			while read var val
 			do
 				#current environment
-				echo "export var=$val"
-				set var=$val
-				export var=$val
+				echo "export $var=$val"
+				set $var=$val
+				export $var=$val
 			done < $1
 		else
 			echo "No matching environment file matching  - "
