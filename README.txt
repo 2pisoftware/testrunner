@@ -132,7 +132,21 @@ $I->waitForElementVisible('#cmfive-modal .savebutton',5);
 -- How do I debug my tests?
 codecept_debug($anyValueHere);
 
+-- how do I stub global functions
+use a namespace as follows to add the override method to a different namespace
+--------------------------
+namespace WebTest {
+use \Codeception\Util\Stub;
 
+// disable header function
+function header($a) {
+	echo("::HEADER::".$a);
+}
+		
+	
+class WebTest extends  \Codeception\TestCase\Test {
+
+---------------------------
 
 !Codeception primer
 http://codeception.com/docs/03-AcceptanceTests
@@ -143,4 +157,23 @@ This allows the person writing tests for a given module to decide what helper cl
 http://codeception.com/docs/modules/WebDriver
 
 
+  include:
+        - '../../cmfive-windowsAdaptation/system/'
+    exclude:
+        - '../../cmfive-windowsAdaptation/*'
+        - '../../cmfive-windowsAdaptation/system/cache'
+        - '../../cmfive-windowsAdaptation/system/composer'
+        - '../../cmfive-windowsAdaptation/system/docs'
+        - '../../cmfive-windowsAdaptation/system/install'
+        - '../../cmfive-windowsAdaptation/system/lib'
+        - '../../cmfive-windowsAdaptation/system/modules'
+        - '../../cmfive-windowsAdaptation/system/templates'
+        - '../../cmfive-windowsAdaptation/system/tests'
+        - '../../cmfive-windowsAdaptation/system/vendor'
+        
 
+
+
+GED
+- json parsing on 404 from cm5
+- _data/install.sql is not copied over on second test run from cache/

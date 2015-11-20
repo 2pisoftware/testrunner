@@ -1,3 +1,10 @@
+coverage:
+    enabled: true
+    blacklist:
+        exclude: 
+            - '..\..\cmfive-windowsAdaptation'
+        include: 
+            - '..\..\testrunner'
 paths:
     tests: tests
     log: tests/_output
@@ -28,4 +35,4 @@ extensions:
             delete_successful: false
         Codeception\Extension\Phantoman:
             path: \inetpub\wwwroot\testrunner\composer\bin\phantomjs
- 
+

@@ -57,7 +57,12 @@ class TestRunner {
 			array_push($cmds,array('CODECEPTION BUILD',TestConfig::getConfig('codeception').' build '.' -c '.$staging));
 			$testParam=TestConfig::getConfig('testSuite');
 			$testParam.=(strlen(trim(TestConfig::getConfig('testSuite')))>0) ? ' '.TestConfig::getConfig('test') : '';
-			array_push($cmds,array('CODECEPTION RUN',TestConfig::getConfig('codeception').' run '.' -d --no-colors --steps -c '.$staging.' '.$testParam));
+			//--coverage --coverage-html
+			$coverage=' -d --no-colors --steps ';
+			if (TestConfig::getConfig('coverage')) {
+				$coverage=' --coverage --xml --html --coverage-html  --coverage-xml --report ';
+			}
+			array_push($cmds,array('CODECEPTION RUN',TestConfig::getConfig('codeception').' run '.$coverage.' -c '.$staging.' '.$testParam));
 			
 			foreach ($cmds as $cmd) {
 				if (php_sapi_name() == 'cli') {

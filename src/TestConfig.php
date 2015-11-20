@@ -9,7 +9,7 @@ use Symfony\Component\Yaml\Yaml;
 class TestConfig {
 	static  $config=null;
 	
-	static $legalParameters=array('testOutputPath','testStagingPath','testPath','testSuite','test','codeception','phantomjs','testIncludePath','testUrl','testLogFiles','cmFivePath','port','driver','hostname','username','password','database');
+	static $legalParameters=array('testOutputPath','testStagingPath','testPath','testSuite','test','codeception','phantomjs','testIncludePath','testUrl','testLogFiles','cmFivePath','port','driver','hostname','username','password','database','coverage');
 	
 	public static function init() {
 		if (!is_array(self::$config)) {
@@ -111,7 +111,8 @@ class TestConfig {
 			$portNumber=TestConfig::getConfig('port');
 			$port = isset($portNumber) && !empty($portNumber) ? ";port=".$portNumber : "";
 			$url = TestConfig::getConfig('driver').":host=".TestConfig::getConfig('hostname').";dbname=".TestConfig::getConfig('database').$port;
-	   
+			//$data['coverage']['include']=[$url];
+			//$data['coverage']['exclude']=[$url];
 			$data['modules']['config']['Db']['dsn']=$url;
 			$data['modules']['config']['Db']['user']=(strlen(trim(TestConfig::getConfig('username')))>0) ? TestConfig::getConfig('username') : '';
 			$data['modules']['config']['Db']['password']=(strlen(trim(TestConfig::getConfig('password')))>0) ? TestConfig::getConfig('password') : '';
