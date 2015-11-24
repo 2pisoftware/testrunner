@@ -122,8 +122,10 @@ class TestConfig {
 			} else {
 				$data['extensions']['config']['Codeception\Extension\Phantoman']['path']=TestConfig::getConfig('phantomjs');
 			}
-			if (TestConfig::getConfig('coverage')) {
-				$data['coverage']=['enabled'=>'true','remote'=>'false','include'=>['..\..\cmfive-windowsAdaptation\system\web*.php','..\..\cmfive-windowsAdaptation\system\functions*.php','..\..\cmfive-windowsAdaptation\system\html*.php','..\..\cmfive-windowsAdaptation\system\classes\*','..\..\cmfive-windowsAdaptation\system\modules\*', '..\..\cmfive-windowsAdaptation\modules\*'],'exclude'=>['\*']];
+			// enable coverage
+			if (TestConfig::getConfig('coverage') && TestConfig::getConfig('cmFivePath') && is_dir(TestConfig::getConfig('cmFivePath'))) {
+				$relativePath=FileSystemTools::findRelativePath(realpath(TestConfig::getConfig('testStagingPath')),realpath(TestConfig::getConfig('cmFivePath')));
+				$data['coverage']=['enabled'=>'true','remote'=>'false','include'=>[$relativePath.'\system\web*.php',$relativePath.'\system\functions*.php',$relativePath.'\system\html*.php',$relativePath.'\system\classes\*',$relativePath.'\system\modules\*', $relativePath.'\modules\*'],'exclude'=>['\*']];
 			}
 			$yaml = Yaml::dump($data);
 		}

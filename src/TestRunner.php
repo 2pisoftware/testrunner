@@ -54,7 +54,9 @@ class TestRunner {
 				// copy installer sql to test data directory
 				copy(TestConfig::getConfig('cmFivePath').DS.'cache'.DS.'install.sql',$staging.DS.'tests'.DS.'_data'.DS.'dump.sql');
 				// copy c3.php for accptance test coverage
-				copy(TestConfig::getConfig('testRunnerPath').DS.'src'.DS.'lib'.DS.'c3.php',TestConfig::getConfig('cmFivePath').DS.'c3.php');
+				//if (TestConfig::getConfig('coverage')) {
+				//	copy(TestConfig::getConfig('testRunnerPath').DS.'src'.DS.'lib'.DS.'c3.php',TestConfig::getConfig('cmFivePath').DS.'c3.php');
+				//}
 			}
 			// build and run
 			array_push($cmds,array('CODECEPTION BUILD',TestConfig::getConfig('codeception').' build '.' -c '.$staging));

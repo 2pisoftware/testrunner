@@ -81,7 +81,7 @@ Allowed parameters include
 'password'			- password for database connection (DEFAULT empty)
 'database'			- database name (DEFAULT empty)
 
-'coverage'			- a true value will enable code coverage report. Tests take considerably longer when generating coverage.
+'coverage'			- a true value will enable code coverage report. Tests take considerably longer when generating coverage. Running with coverage disables debugging and other diagnostic output.
 
 
 !Environment variables
@@ -190,25 +190,31 @@ RewriteRule c3 c3.php
 !Codeception primer
 http://codeception.com/docs/03-AcceptanceTests
 
+
 Typically you would use webdriver in your acceptance tests, webdriver url configuration is written to the acceptance.suite.yml file when tests are staged and run.
 The acceptance.suite.yml file from your test folder is used as a template so configuration values other than url can be modified there.
 This allows the person writing tests for a given module to decide what helper classes they want to use.
 http://codeception.com/docs/modules/WebDriver
 
+Acceptance Tests
+Acceptance test drive the user interface to validate the success of user stories against the software.
+Acceptance tests are written as *Ces.php files
+They provide _before and _after methods
+All public functions whose name starts with 'test' are run as test cases.
+Acceptance tests can provide coverage a much of the code base in broad strokes.
+Acceptance tests are more vulnerable to change than API based testing as per unit or functional tests.
 
-    include:
-        - '../../cmfive-windowsAdaptation/system/'
-    exclude:
-        - '../../cmfive-windowsAdaptation/*'
-        - '../../cmfive-windowsAdaptation/system/cache'
-        - '../../cmfive-windowsAdaptation/system/composer'
-        - '../../cmfive-windowsAdaptation/system/docs'
-        - '../../cmfive-windowsAdaptation/system/install'
-        - '../../cmfive-windowsAdaptation/system/lib'
-        - '../../cmfive-windowsAdaptation/system/modules'
-        - '../../cmfive-windowsAdaptation/system/templates'
-        - '../../cmfive-windowsAdaptation/system/tests'
-        - '../../cmfive-windowsAdaptation/system/vendor'
+
+Unit Tests
+Acceptance tests are written as *Test.php files
+They provide _before and _after methods
+All public functions whose name starts with 'test' are run as test cases.
+Functions are scraped from the test file into a codeception parent class.
+All public functions whose name starts with 'helper' are made available in the new class scope.
+Unit tests are written with full knowledge of the system internals.
+By looking strictly at input and postconditions of a function, unit tests can concisely fill or stub requirements.
+Unit tests are typically more robust that acceptance tests in response to change in the code base.
+
 
 GED
 - json parsing on 404 from cm5 => FAQ
