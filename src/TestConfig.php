@@ -116,7 +116,15 @@ class TestConfig {
 			$data['modules']['config']['Db']['dsn']=$url;
 			$data['modules']['config']['Db']['user']=(strlen(trim(TestConfig::getConfig('username')))>0) ? TestConfig::getConfig('username') : '';
 			$data['modules']['config']['Db']['password']=(strlen(trim(TestConfig::getConfig('password')))>0) ? TestConfig::getConfig('password') : '';
-			$data['extensions']['config']['Codeception\Extension\Phantoman']['path']=TestConfig::getConfig('phantomjs');
+			// disable phantom for unit tests
+			if (TestConfig::getConfig('testSuite')==='unit') {
+				unset($data['extensions']['enabled'][array_search('Codeception\Extension\Phantoman',$data['extensions']['enabled'])]);
+			} else {
+				$data['extensions']['config']['Codeception\Extension\Phantoman']['path']=TestConfig::getConfig('phantomjs');
+			}
+			if (TestConfig::getConfig('coverage')) {
+				$data['coverage']=['enabled'=>'true','remote'=>'false','include'=>['..\..\cmfive-windowsAdaptation\system\web*.php','..\..\cmfive-windowsAdaptation\system\functions*.php','..\..\cmfive-windowsAdaptation\system\html*.php','..\..\cmfive-windowsAdaptation\system\classes\*','..\..\cmfive-windowsAdaptation\system\modules\*', '..\..\cmfive-windowsAdaptation\modules\*'],'exclude'=>['\*']];
+			}
 			$yaml = Yaml::dump($data);
 		}
 		$codeceptionFile=TestConfig::getConfig('testStagingPath').DS.'codeception.yml';

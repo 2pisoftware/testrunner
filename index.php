@@ -57,7 +57,7 @@ if (!empty(TestConfig::$config['cmFivePath'])) {
 	$output[]='<VirtualHost * >';
 	$output[]="ServerName  ".TestConfig::$config['testUrl'];
 	// set in CmFiveInstaller
-	$output[]="DocumentRoot ".$config['cmFivePath'];
+	$output[]="DocumentRoot ".TestConfig::$config['cmFivePath'];
 	$output[]="ErrorLog ".TestConfig::$config['testLogFiles']; 
 	$output[]='</VirtualHost>';
 	$output[]="-------------------------------------------------";

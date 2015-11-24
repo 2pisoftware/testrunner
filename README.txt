@@ -35,7 +35,9 @@ runtests.bat can be added to your PATH environment variable and run from anywher
 alternatively you can install the test runner under a webserver and hit the index.php file. GET variables are used as configuration arguments.
 setenvironment.bat can be used to set persistent global environment variables and restart IIS web server. This must be run in a console running as Administrator.
 
-Parameters are tokenised by the first : to match parameter names. Allowed parameters include
+Parameters are tokenised by the first : to match parameter names. 
+Empty values are allowed eg testSuite: to disable a default from the environment.
+Allowed parameters include
 'testPath'  - where to look for test suites.   
 (DEFAULT testrunner tests)
 
@@ -79,6 +81,7 @@ Parameters are tokenised by the first : to match parameter names. Allowed parame
 'password'			- password for database connection (DEFAULT empty)
 'database'			- database name (DEFAULT empty)
 
+'coverage'			- a true value will enable code coverage report. Tests take considerably longer when generating coverage.
 
 
 !Environment variables
@@ -133,7 +136,7 @@ $I->waitForElementVisible('#cmfive-modal .savebutton',5);
 codecept_debug($anyValueHere);
 
 -- how do I stub global functions
-use a namespace as follows to add the override method to a different namespace
+use a namespace as follows to add the override method to a different namespace. see cmfive/system/tests/unit/WebTest.php
 --------------------------
 namespace WebTest {
 use \Codeception\Util\Stub;
@@ -148,6 +151,42 @@ class WebTest extends  \Codeception\TestCase\Test {
 
 ---------------------------
 
+-- do I need to clean up in my tests
+YES
+but between each test, 
+the database is refreshed from cache/install.sql
+in WebTest, the Web instance is renewed before each test
+in WebTest, the removeTestTemplateFiles is called to cleanup files. Similar approaches may be used in other tests where files are created.
+
+
+-- how do i enable coverage reporting for my test run
+short answer is use the parameter coverage with some true value
+eg runtests coverage:1
+BUT you need the following prerequisites
+1. Install xdebug  http://xdebug.org/wizard.php or https://www.jetbrains.com/phpstorm/help/configuring-xdebug.html
+[Xdebug]
+zend_extension="<path to php_xdebug.dll>"
+xdebug.remote_enable=1
+xdebug.remote_port="<the port for Xdebug to listen to>" (the default port is 9000)
+xdebug.profiler_enable=1
+xdebug.profiler_output_dir="<AMP home\tmp>"
+2. Modify .htaccess to send c3 requests to c3.php 
+ie 
+RewriteRule c3 c3.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 !Codeception primer
 http://codeception.com/docs/03-AcceptanceTests
 
@@ -157,7 +196,7 @@ This allows the person writing tests for a given module to decide what helper cl
 http://codeception.com/docs/modules/WebDriver
 
 
-  include:
+    include:
         - '../../cmfive-windowsAdaptation/system/'
     exclude:
         - '../../cmfive-windowsAdaptation/*'
@@ -170,10 +209,9 @@ http://codeception.com/docs/modules/WebDriver
         - '../../cmfive-windowsAdaptation/system/templates'
         - '../../cmfive-windowsAdaptation/system/tests'
         - '../../cmfive-windowsAdaptation/system/vendor'
-        
-
-
 
 GED
-- json parsing on 404 from cm5
+- json parsing on 404 from cm5 => FAQ
 - _data/install.sql is not copied over on second test run from cache/
+
+
