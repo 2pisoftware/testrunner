@@ -9,6 +9,9 @@ $testRunnerPath=dirname(__FILE__);
 require($testRunnerPath.DS.'src'.DS.'FileSystemTools.php');
 require($testRunnerPath.DS.'src'.DS.'TestConfig.php');
 require($testRunnerPath.DS.'src'.DS.'TestRunner.php');
+require($testRunnerPath.DS.'src'.DS.'CmFiveInstaller.php');
+require($testRunnerPath.DS.'src'.DS.'CmFiveTestModuleGenerator.php');
+
 require($testRunnerPath.DS.'composer'.DS.'vendor'.DS.'autoload.php');
 
 
@@ -62,7 +65,7 @@ if (!empty(TestConfig::$config['cmFivePath'])) {
 	$output[]='</VirtualHost>';
 	$output[]="-------------------------------------------------";
 }
-require($testRunnerPath.DS.'src'.DS.'CmFiveInstaller.php');
+
 $installer= new CmFiveInstaller();
 $installer->install(TestConfig::$config);
 $output[]="-------------------------------------------------";

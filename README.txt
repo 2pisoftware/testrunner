@@ -136,6 +136,11 @@ $I->waitForElementVisible('#cmfive-modal .savebutton',5);
 codecept_debug($anyValueHere);
 
 -- how do I stub global functions
+A. Use AspectMock ??? I haven't been able to make this work. problems with aspectmock initialisation paths ???
+B. add a function call to the test target class that calls the global function and replace calls to the global function.
+This method can then be stubbed.
+
+C. ???? this stopped working ????
 use a namespace as follows to add the override method to a different namespace. see cmfive/system/tests/unit/WebTest.php
 --------------------------
 namespace WebTest {
@@ -176,7 +181,11 @@ RewriteRule c3 c3.php
 
 
 
-
+-- functions that are called indirectly eg call_user_func do not show as executed in coverage reports
+eg call_user_func_array(array($class,$functionToRun),$arguments);
+I've tried the following which cause other problems and chased this no further
+$class->$functionToRun($arguments);
+			
 
 
 
@@ -198,7 +207,7 @@ http://codeception.com/docs/modules/WebDriver
 
 Acceptance Tests
 Acceptance test drive the user interface to validate the success of user stories against the software.
-Acceptance tests are written as *Ces.php files
+Acceptance tests are written as *Cest.php files
 They provide _before and _after methods
 All public functions whose name starts with 'test' are run as test cases.
 Acceptance tests can provide coverage a much of the code base in broad strokes.
@@ -216,8 +225,5 @@ By looking strictly at input and postconditions of a function, unit tests can co
 Unit tests are typically more robust that acceptance tests in response to change in the code base.
 
 
-GED
-- json parsing on 404 from cm5 => FAQ
-- _data/install.sql is not copied over on second test run from cache/
 
 

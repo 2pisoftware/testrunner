@@ -1,4 +1,8 @@
 <?php 
+
+
+
+
 /*****************************
  * Tools to help find and run tests in source code
  * Tests must be organised into suites where each suite is a folder
@@ -55,17 +59,18 @@ class TestRunner {
 				copy(TestConfig::getConfig('cmFivePath').DS.'cache'.DS.'install.sql',$staging.DS.'tests'.DS.'_data'.DS.'dump.sql');
 				// copy c3.php for accptance test coverage
 				if (TestConfig::getConfig('coverage')) {
-					copy(TestConfig::getConfig('testRunnerPath').DS.'src'.DS.'lib'.DS.'c3.php',TestConfig::getConfig('cmFivePath').DS.'c3.php');
+					copy(TestConfig::getConfig('testRunnerPath').DS.'src'.DS.'lib'.DS.'c3.php',TestConfig::getConfig('testRunnerPath').DS.'staging'.DS.'c3.php');
 				}
 			}
 			// build and run
 			array_push($cmds,array('CODECEPTION BUILD',TestConfig::getConfig('codeception').' build '.' -c '.$staging));
 			$testParam=TestConfig::getConfig('testSuite');
 			$testParam.=(strlen(trim(TestConfig::getConfig('testSuite')))>0) ? ' '.TestConfig::getConfig('test') : '';
-			//--coverage --coverage-html
+			// these options conflict with coverage options below so only one set
 			$coverage=' -d --no-colors --steps ';
 			if (TestConfig::getConfig('coverage')) {
-				$coverage=' --coverage --xml --html --coverage-html  --coverage-xml --report ';
+				//--coverage-xml
+				$coverage=' --coverage --xml --html --coverage-html   --report ';
 			}
 			array_push($cmds,array('CODECEPTION RUN',TestConfig::getConfig('codeception').' run '.$coverage.' -c '.$staging.' '.$testParam));
 			
@@ -102,8 +107,8 @@ class TestRunner {
 			FileSystemTools::copyRecursive($staging.DS.'_output',TestConfig::getConfig('testOutputPath').DS.$testSuiteName);
 		}
 		// clean up
-		if (strlen(trim(TestConfig::getConfig('cmFivePath')))>0)  {
-			unlink(TestConfig::getConfig("cmFivePath")."/c3.php");
+		if (strlen(trim(TestConfig::getConfig('testRunnerPath')))>0 && file_exists(TestConfig::getConfig("testRunnerPath")."/staging/c3.php"))  {
+			//unlink(TestConfig::getConfig("testRunnerPath")."/staging/c3.php");
 		}
 		//FileSystemTools::setPermissionsAllowEveryone($staging);
 		//FileSystemTools::setPermissionsAllowEveryone(TestConfig::getConfig('testOutputPath'));

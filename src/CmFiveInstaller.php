@@ -96,6 +96,16 @@ class CmFiveInstaller {
 		$output[]='cmFive Installer';
 		$output[]='Write config.php';
 		$this->installConfigFile($config);
+		// write testing modules to filesystem
+		$gen=new CmFiveTestModuleGenerator($config['cmFivePath']);
+		$gen->createTestTemplateFiles();
+		// cleanup
+		register_shutdown_function(
+			function($webTest) {
+				$this->removeTestTemplateFiles();
+			}
+		,$gen);
+		
 		$output[]='Install SQL';
 		// save combined sql file for running between tests
 		$sql=$this->getInstallSql($config);

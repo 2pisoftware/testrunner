@@ -8,16 +8,7 @@
  * @author tiger
  */
 
-// $_SERVER['HTTP_X_CODECEPTION_CODECOVERAGE_DEBUG'] = 1;
-if (!function_exists('__c3_logme')) {
-    function __c3_logme($message)
-    {
-		//file_put_contents('C:\tmp\c3log.txt',date('Y-m-d H:i:s') .$message."\n",FILE_APPEND);
-		file_put_contents('C:\tmp\c3log.txt',$message);
-    }
-}
-//_c3_logme('what is happening');
-//die();
+$_SERVER['HTTP_X_CODECEPTION_CODECOVERAGE_DEBUG'] = 1;
 
 if (isset($_COOKIE['CODECEPTION_CODECOVERAGE'])) {
     $cookie = json_decode($_COOKIE['CODECEPTION_CODECOVERAGE'], true);
@@ -36,7 +27,7 @@ if (isset($_COOKIE['CODECEPTION_CODECOVERAGE'])) {
 }
 
 if (!array_key_exists('HTTP_X_CODECEPTION_CODECOVERAGE', $_SERVER)) {
-    return;
+//    return;
 }
 
 if (!function_exists('__c3_error')) {
@@ -202,7 +193,7 @@ if (!is_dir(C3_CODECOVERAGE_MEDIATE_STORAGE)) {
         __c3_error('Failed to create directory "' . C3_CODECOVERAGE_MEDIATE_STORAGE . '"');
     }
 }
-
+try {
 // evaluate base path for c3-related files
 $path = realpath(C3_CODECOVERAGE_MEDIATE_STORAGE) . DIRECTORY_SEPARATOR . 'codecoverage';
 
@@ -257,5 +248,7 @@ if ($requested_c3_report) {
         );
     }
 }
-
+} catch (Exception $e) {
+	var_dump($e);
+}
 // @codeCoverageIgnoreEnd
