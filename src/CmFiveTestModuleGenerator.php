@@ -99,10 +99,11 @@ class CmFiveTestModuleGenerator {
 			file_put_contents($file,':::TEMPLATE:::'.$file."::");
 		}
 		// write module config
-		file_put_contents($this->ROOT_PATH."/system/modules/systestmodule/config.php",'<'.'?php Config::set("systestmodule",["testing"=>"fred","active"=>true,"topmenu"=>false,"path"=>"system/modules","hooks"=>["systestmodule","core_web"]]);');
-		file_put_contents($this->ROOT_PATH."/modules/testmodule/config.php",'<'.'?php Config::set("testmodule",["testing"=>"fred","active"=>true,"topmenu"=>false,"path"=>"modules","hooks"=>["systestmodule","core_web"]]);');
+		file_put_contents($this->ROOT_PATH."/system/modules/systestmodule/config.php",'<'.'?php Config::set("systestmodule",["testing"=>"fred","active"=>true,"topmenu"=>false,"path"=>"system/modules","hooks"=>["systestmodule","core_web","core_dbobject"]]);');
+		file_put_contents($this->ROOT_PATH."/modules/testmodule/config.php",'<'.'?php Config::set("testmodule",["testing"=>"fred","active"=>true,"topmenu"=>false,"path"=>"modules","hooks"=>["systestmodule","core_web","core_dbobject"]]);');
 		// hooks file
 		$content='<'.'?php';
+		// web hooks
 		foreach ([
 		'testmodule_core_web_testhooks',
 		'testmodule_core_web_testhooks_ping',
@@ -112,6 +113,25 @@ class CmFiveTestModuleGenerator {
 		'testmodule_core_web_testhooks_ping_testmodule_sleep',
 		] as $hookFunction) {
 			$content.=' function '.$hookFunction.'($w,$a) { echo ":::HOOK:::'.$hookFunction.':::"; }'."\n";
+		}
+		// db hooks
+		foreach ([
+		'testmodule_core_dbobject_before_insert',
+		'testmodule_core_dbobject_after_insert',
+		'testmodule_core_dbobject_before_update',
+		'testmodule_core_dbobject_after_update',
+		'testmodule_core_dbobject_before_delete',
+		'testmodule_core_dbobject_after_delete',
+		
+		'testmodule_core_dbobject_before_insert_TestmoduleData',
+		'testmodule_core_dbobject_after_insert_TestmoduleData',
+		'testmodule_core_dbobject_before_update_before_TestmoduleData',
+		'testmodule_core_dbobject_after_update_TestmoduleData',
+		'testmodule_core_dbobject_before_delete_TestmoduleData',
+		'testmodule_core_dbobject_after_delete_TestmoduleData',
+		'testmodule_core_dbobject_indexChange_TestmoduleData',
+		] as $hookFunction) {
+			$content.=' function '.$hookFunction.'($w,$a) { echo ":::DBHOOK:::'.$hookFunction.':::"; }'."\n";
 		}
 		// write hooks file
 		 $content.=' function systestmodule_systestmodule_dostuff($w,$a) {echo ":::".$w->_module.":::".$a.":::stuff done";}'."\n";
@@ -155,7 +175,6 @@ class CmFiveTestModuleGenerator {
 	 * Delete template files
 	 *****************************/
 	function removeTestTemplateFiles() {
-		return;
 		FileSystemTools::rmdirRecursive($this->ROOT_PATH."/system/modules/systestmodule");
 		FileSystemTools::rmdirRecursive($this->ROOT_PATH."/modules/testmodule");
 		foreach ([

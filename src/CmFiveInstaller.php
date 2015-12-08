@@ -100,11 +100,7 @@ class CmFiveInstaller {
 		$gen=new CmFiveTestModuleGenerator($config['cmFivePath']);
 		$gen->createTestTemplateFiles();
 		// cleanup
-		register_shutdown_function(
-			function($webTest) {
-				$this->removeTestTemplateFiles();
-			}
-		,$gen);
+		register_shutdown_function([$gen,'removeTestTemplateFiles']);
 		
 		$output[]='Install SQL';
 		// save combined sql file for running between tests
