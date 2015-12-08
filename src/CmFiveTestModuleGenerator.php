@@ -200,7 +200,7 @@ class CmFiveTestModuleGenerator {
 				}
 		}
 		if (file_exists($this->ROOT_PATH."/templates/minilayout.tpl.php"))  {
-		//	unlink($this->ROOT_PATH."/templates/minilayout.tpl.php");
+			unlink($this->ROOT_PATH."/templates/minilayout.tpl.php");
 		}
 	}	
 

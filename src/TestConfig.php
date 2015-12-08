@@ -34,6 +34,7 @@ class TestConfig {
 		if (!array_key_exists('testOutputPath',self::$config) || empty(self::$config['testOutputPath'])) self::$config['testOutputPath']=self::$config['testRunnerPath'].DS.'output';
 		if (!array_key_exists('codeception',self::$config) || empty(self::$config['codeception'])) self::$config['codeception']=self::$config['testRunnerPath'].DS.'composer'.DS.'bin'.DS.'codecept';
 		if (!array_key_exists('phantomjs',self::$config) || empty(self::$config['phantomjs'])) self::$config['phantomjs']=trim(self::$config['testRunnerPath'].DS.'bin'.DS.'phantomjs'); 
+		self::$config['port']='';
 		// from cm5 if available (AS THIRD HIGHEST PRIORITY)
 		// TODO
 		// from environment variables  (AS SECOND HIGHEST PRIORITY)

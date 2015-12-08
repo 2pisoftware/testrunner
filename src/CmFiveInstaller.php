@@ -7,7 +7,7 @@ $testRunnerPath=dirname(dirname(__FILE__));
 if (php_sapi_name() == 'cli') {
 	// now we have all required parameters
 	// check if we need to automatically run the installer on inclusion of this file
-	if ($argv[1]=="install") {
+	if (count($argv)>1 && $argv[1]=="install") {
 		$response=CmFiveInstaller::findConfig($argv);
 		if (count($response['errors'])==0) {
 			$config=$response['config'];
@@ -100,7 +100,7 @@ class CmFiveInstaller {
 		$gen=new CmFiveTestModuleGenerator($config['cmFivePath']);
 		$gen->createTestTemplateFiles();
 		// cleanup
-		register_shutdown_function([$gen,'removeTestTemplateFiles']);
+		register_shutdown_function([&$gen,'removeTestTemplateFiles']);
 		
 		$output[]='Install SQL';
 		// save combined sql file for running between tests
