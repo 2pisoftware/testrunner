@@ -64,14 +64,14 @@ if (!empty(TestConfig::$config['cmFivePath'])) {
 	$output[]="ErrorLog ".TestConfig::$config['testLogFiles']; 
 	$output[]='</VirtualHost>';
 	$output[]="-------------------------------------------------";
+
+
+	$installer= new CmFiveInstaller();
+	$installer->install(TestConfig::$config);
+	$output[]="-------------------------------------------------";
+	$output[]="INSTALLED CMFIVE";
+	$output[]="-------------------------------------------------";
 }
-
-$installer= new CmFiveInstaller();
-$installer->install(TestConfig::$config);
-$output[]="-------------------------------------------------";
-$output[]="INSTALLED CMFIVE";
-$output[]="-------------------------------------------------";
-
 // DUMP OUTPUT
 if (php_sapi_name() == 'cli') {
 	echo implode("\n",$output);
