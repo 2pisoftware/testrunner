@@ -11,6 +11,8 @@
 //echo "<hr>";
 //print_r($h);
 //echo "</pre>";
+
+mkdir ("/var/www/tools/testrunner/webhooks/jobs");
 $doCheckout=false;
 
 

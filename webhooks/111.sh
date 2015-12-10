@@ -1,1 +1,0 @@
-testrepository_bitbucket	stever@syntithenai.com
