@@ -1,0 +1,1 @@
+testrepository_bitbucket	syntithenai@gmail.com
