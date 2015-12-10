@@ -18,24 +18,31 @@ $repo='';
 $user='';
 $b=json_decode(@file_get_contents('php://input'));
 $h=getallheaders();
-	
+
+ob_start();	
 if (array_key_exists('X-GitHub-Event',$h) && $h['X-GitHub-Event']==='push') {
 	$repo=$b->repository->name;
 	$user=$b->pusher->email;
-	$user='syntithenai@gmail.com';
 	$doCheckout=true;
 } else if (array_key_exists('X-Event-Key',$h) &&  $h['X-Event-Key']==='repo:push') {
 	$repo=$b->repository->name;
-	$user='syntithenai@gmail.com';
-	$doCheckout=true;
+	$user=''; //syntithenai@gmail.com';
+	if (!empty($b) &&  !empty($b->push) && is_array($b->push->changes)) {
+		foreach ($b->push->changes as $change) {
+			foreach ($change->commits as $commit) {
+				$user=$commit->author->raw;
+			}
+			$doCheckout=true;
+		}
+	}
 } else {
 	//readfile('hooklog.txt');
 }   
 
-ob_start();
-if (false && $doCheckout) {
+print_r(['REPO',$repo,'USER',$user]);
+		
+if ($doCheckout) {
 	try {
-		print_r(['REPO',$repo,'USER',$user]);
 		// git update local 
 		//require_once(__DIR__.'/Git.php');
 		//$repos = Git::open('/var/www/projects/'.$repo."/dev");
@@ -50,7 +57,7 @@ if (false && $doCheckout) {
 	}
 
 }
-var_dump($b);
+//print_r($b);
 // on failure of tests send email to repository owner and 
 $content=ob_get_contents();
 ob_end_clean();
