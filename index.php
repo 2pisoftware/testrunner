@@ -31,8 +31,8 @@ if (php_sapi_name() == 'cli') {
 } else {
 	?>
 	<h1>Test Run</h1>
-	<a href='http://code.2pisoftware.com' >
-	<?
+	<a href='http://code.2pisoftware.com' >CODE</a>
+	<?php
 	die();
 	// set any legal parameters
 	foreach (TestConfig::$legalParameters as $key=>$parameterName) {
