@@ -29,7 +29,7 @@ if (php_sapi_name() == 'cli') {
 	}
 // handle POST vars	
 } else {
-
+	die();
 	// set any legal parameters
 	foreach (TestConfig::$legalParameters as $key=>$parameterName) {
 		if (array_key_exists($parameterName,$_GET) && strlen(trim($_GET[$parameterName]))>0) {
