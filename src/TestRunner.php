@@ -104,7 +104,9 @@ class TestRunner {
 			}
 			// save output files
 			$testSuiteName=str_replace(':','_',str_replace(DS,'_',$testFolder));
-			FileSystemTools::copyRecursive($staging.DS.'_output',TestConfig::getConfig('testOutputPath').DS.$testSuiteName);
+			@mkdir(TestConfig::getConfig('testOutputPath').DS.$testSuiteName);
+			$output[]="COPY test results from ".$staging.DS.'tests'.DS.'_output'." to ".TestConfig::getConfig('testOutputPath').DS.$testSuiteName;
+			FileSystemTools::copyRecursive($staging.DS.'tests'.DS.'_output',TestConfig::getConfig('testOutputPath').DS.$testSuiteName);
 		}
 		// clean up
 		if (strlen(trim(TestConfig::getConfig('testRunnerPath')))>0 && file_exists(TestConfig::getConfig("testRunnerPath")."/staging/c3.php"))  {
