@@ -1,8 +1,9 @@
 #!/bin/bash
 DIR=`dirname $0`
-TESTRUNNERPATH=/var/www/tools/testrunner
 PROJECTSPATH=/var/www/projects
+TESTRUNNERPATH=$PROJECTSPATH/testrunner
 RUNLOG=/tmp/testsrunlog
+
 if  [ -e /tmp/testsrunning ] 
 then
   echo >> $RUNLOG
@@ -25,9 +26,9 @@ else
 		code=`tail -1 /tmp/testrunout|cut -d' ' -f 3`
 		echo CODE:$code
 		testOut=`cat /tmp/testrunout`;
-		#email=syntithenai@iinet.net.au
 		# FORCE ALL NOTIFICATIONS TO LOCAL DELIVERY
-		email=ubuntu
+		#email=ubuntu
+		email=syntithenai@gmail.com
 		#echo $testOut
 		#rm /tmp/testrunout
 		if [ $code -eq 0 ]

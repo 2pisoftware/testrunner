@@ -53,7 +53,7 @@ if ($doCheckout) {
 		// run tests by placing job file
 		$a=time();
 		sleep(1);
-		file_put_contents('/var/www/tools/testrunner/webhooks/jobs/'.$a,$repo.'	'.$user);
+		file_put_contents('/var/www/projects/testrunner/webhooks/jobs/'.$a,$repo.'	'.$user);
 	} catch (Exception $e) {
 		var_dump($e);
 	}
@@ -68,7 +68,7 @@ file_put_contents('hooklog.txt','this is it:'.$content."\n",FILE_APPEND);
 
 
 // for log 
-//	 tail -f /var/www/tools/testrunner/webhooks/hooklog.txt & tail -f /var/log/apache2/error.log &
+//	 tail -f /var/www/projects/testrunner/webhooks/hooklog.txt & tail -f /var/log/apache2/error.log &
 // as root
 // cd /root/testrepository_bitbucket; echo "dd" >> readme.txt; git add .; git commit -m eek ; git push
 ?>
