@@ -12,7 +12,7 @@
 //print_r($h);
 //echo "</pre>";
 
-mkdir ("/var/www/tools/testrunner/webhooks/jobs");
+@mkdir ("/var/www/projects/testrunner/webhooks/jobs");
 $doCheckout=false;
 
 
