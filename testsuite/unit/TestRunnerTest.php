@@ -8,9 +8,9 @@ class TestRunnerTest extends \Codeception\TestCase\Test
      */
     protected $guy;
 
-	public $tmpPath1=DS.'tmp'.DS.'testing1';
-	public $tmpPath2=DS.'tmp'.DS.'testing2';
-
+	public $tmpPath1='/tmp/testing1';
+    public $tmpPath2='/tmp/testing2';
+    
     protected function _before()
     {
 		FileSystemTools::rmdirRecursive($this->tmpPath1);

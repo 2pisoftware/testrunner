@@ -3,7 +3,7 @@ use \AcceptanceGuy;
 
 class CliTestRunnerCest
 {
-	var $tmpStaging=DS.'tmp'.DS.'staging';
+	var $tmpStaging='/tmp/staging';
 	var $path='';
     public function _before(AcceptanceGuy $I)
     {
