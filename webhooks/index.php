@@ -12,7 +12,7 @@
 //print_r($h);
 //echo "</pre>";
 
-@mkdir ("/var/www/projects/testrunner/webhooks/jobs");
+@mkdir ("/var/www/projects/testrunner/dev/webhooks/jobs");
 $doCheckout=false;
 
 
@@ -53,7 +53,7 @@ if ($doCheckout) {
 		// run tests by placing job file
 		$a=time();
 		sleep(1);
-		file_put_contents('/var/www/projects/testrunner/webhooks/jobs/'.$a,$repo.'	'.$user);
+		file_put_contents('/var/www/projects/testrunner/dev/webhooks/jobs/'.$a,$repo.'	'.$user);
 	} catch (Exception $e) {
 		var_dump($e);
 	}

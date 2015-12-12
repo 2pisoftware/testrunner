@@ -227,3 +227,15 @@ Unit tests are typically more robust that acceptance tests in response to change
 
 
 
+
+! aliases to insert into /root/.bashrc
+alias testPush='cd /root/testrepository_bitbucket; echo "dd" >> readme.txt; git add .; git commit -m eeek; git push; cd -'
+alias testRun='function _blah(){ echo -n "$1" ; echo -e -n "\t"; echo -n "$2"; };_blah > /var/www/projects/testrunner/dev/webhooks/jobs/fakejob'
+alias testLogs='tail -f /var/log/apache2/other_vhosts_access.log  /var/log/apache2/error.log /root/mbox &'
+alias testJobs='cat /var/www/projects/testrunner/dev/webhooks/jobs/*'
+
+#also add testrunner to path
+export PATH=$PATH:/var/www/projects/testrunner/dev/
+
+# also edit crontab and add
+* * 	* * * root /var/www/projects/testrunner/dev/webhooks/cronjob.sh

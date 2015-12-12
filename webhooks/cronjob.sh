@@ -1,7 +1,7 @@
 #!/bin/bash
 DIR=`dirname $0`
 PROJECTSPATH=/var/www/projects
-TESTRUNNERPATH=$PROJECTSPATH/testrunner
+TESTRUNNERPATH=$PROJECTSPATH/testrunner/dev
 RUNLOG=/tmp/testsrunlog
 
 if  [ -e /tmp/testsrunning ] 
@@ -64,7 +64,7 @@ else
 		fi
              	# rm /tmp/testmail
 		rm -rf  /var/www/projects/$repo/tests/*
-		cp -r /var/www/projects/testrunner/output/*  /var/www/projects/$repo/tests/
+		cp -r $TESTRUNNERPATH/output/*  $PROJECTSPATH/$repo/tests/
 	fi
   done
   rm /tmp/testsrunning
