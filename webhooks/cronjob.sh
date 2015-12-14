@@ -30,7 +30,8 @@ else
 		testOut=`cat /tmp/testrunout|grep -v "password="`;
 		# FORCE ALL NOTIFICATIONS TO LOCAL DELIVERY
 		#email=ubuntu
-		email=root@code.2pisoftware.com
+		#email=root@code.2pisoftware.com
+		#email=stever@syntithenai.com
 		#echo $testOut
 		#rm /tmp/testrunout
 		if [ $code -eq 0 ]
@@ -48,7 +49,7 @@ else
 		  echo "$testOut" >> /tmp/testmail
                   echo >> /tmp/testmail
 		  cat /tmp/testmail | mail -s 'Your push to git passes all tests' "$email"
-		  #$TESTRUNNERPATH/runtests.sh coverage:1
+		  $TESTRUNNERPATH/runtests.sh coverage:1 > /dev/null
 		else 
 			echo "Failed Tests" > /tmp/testmail
 			echo >> /tmp/testmail
