@@ -123,26 +123,28 @@ class TestRunner {
 	 * one test suite
 	 * @return Array (of test file paths)
 	 *****************************/
-	static function findTestFolders( $path) {
+	static function findTestFolders( $paths) {
 		$suites=array();
-		if( is_dir($path) ) {
-			if (TestRunner::isTestSuiteFolder($path)) {
-				$stagingSuiteName=str_replace(':','_',str_replace(DS,'_',$path));
-				$suites[$stagingSuiteName]=$path;
-			}	
-			$objects = scandir($path);
-			if( sizeof($objects) > 0 ) {
-				foreach( $objects as $file ) {
-					if( $file == "." || $file == ".." )
-						continue;
-					if( is_dir($path.DS.basename($file) ) ) {
-						if (TestRunner::isTestSuiteFolder($path.DS.basename($file))) {
-							$stagingSuiteName=str_replace(':','_',str_replace(DS,'_',$path.DS.basename($file)));
-							// ensure absolute file references
-							$suites[$stagingSuiteName]=$path.DS.basename($file);
+		foreach (explode("::::",$paths) as $path) {
+			if( is_dir($path) ) {
+				if (TestRunner::isTestSuiteFolder($path)) {
+					$stagingSuiteName=str_replace(':','_',str_replace(DS,'_',$path));
+					$suites[$stagingSuiteName]=$path;
+				}	
+				$objects = scandir($path);
+				if( sizeof($objects) > 0 ) {
+					foreach( $objects as $file ) {
+						if( $file == "." || $file == ".." )
+							continue;
+						if( is_dir($path.DS.basename($file) ) ) {
+							if (TestRunner::isTestSuiteFolder($path.DS.basename($file))) {
+								$stagingSuiteName=str_replace(':','_',str_replace(DS,'_',$path.DS.basename($file)));
+								// ensure absolute file references
+								$suites[$stagingSuiteName]=$path.DS.basename($file);
+							}
+							// recurse into folder
+							$suites=array_merge($suites,TestRunner::findTestFolders($path.DS.basename($file)));
 						}
-						// recurse into folder
-						$suites=array_merge($suites,TestRunner::findTestFolders($path.DS.basename($file)));
 					}
 				}
 			}

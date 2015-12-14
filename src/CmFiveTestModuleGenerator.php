@@ -131,7 +131,7 @@ class CmFiveTestModuleGenerator {
 		'testmodule_core_dbobject_after_delete_TestmoduleData',
 		'testmodule_core_dbobject_indexChange_TestmoduleData',
 		] as $hookFunction) {
-			$content.=' function '.$hookFunction.'($w,$a) { echo ":::DBHOOK:::'.$hookFunction.':::"; }'."\n";
+			//$content.=' function '.$hookFunction.'($w,$a) { echo ":::DBHOOK:::'.$hookFunction.':::"; }'."\n";
 		}
 		// write hooks file
 		 $content.=' function systestmodule_systestmodule_dostuff($w,$a) {echo ":::".$w->_module.":::".$a.":::stuff done";}'."\n";
