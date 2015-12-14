@@ -12,7 +12,7 @@
 //print_r($h);
 //echo "</pre>";
 
-mkdir ("/tmp/test/jobs",0777,true);
+@mkdir ("/tmp/test/jobs",0777,true);
 $doCheckout=false;
 
 
