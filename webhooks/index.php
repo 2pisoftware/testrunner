@@ -12,7 +12,7 @@
 //print_r($h);
 //echo "</pre>";
 
-@mkdir ("/var/www/projects/testrunner/dev/webhooks/jobs");
+mkdir ("/tmp/test/jobs",0777,true);
 $doCheckout=false;
 
 
@@ -38,6 +38,7 @@ if (array_key_exists('X-GitHub-Event',$h) && $h['X-GitHub-Event']==='push') {
 		}
 	}
 } else {
+echo "not enough data to run";
 	//readfile('hooklog.txt');
 }   
 
@@ -53,7 +54,7 @@ if ($doCheckout) {
 		// run tests by placing job file
 		$a=time();
 		sleep(1);
-		file_put_contents('/var/www/projects/testrunner/dev/webhooks/jobs/'.$a,$repo.'	'.$user);
+		file_put_contents("/tmp/test/jobs/job".$a,$repo.'	'.$user);
 	} catch (Exception $e) {
 		var_dump($e);
 	}

@@ -14,7 +14,7 @@ else
   echo >> $RUNLOG
   echo `date` >> $RUNLOG
   #sleep 3
-  for i in `ls -d -1  $DIR/jobs/* 2> /dev/null | sort`; do
+  for i in `ls -d -1  /tmp/test/jobs/* 2> /dev/null | sort`; do
     repo=`cat $i|cut  -f 1`
     email=`cat $i|cut  -f 2`
     rm $i
