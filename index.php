@@ -73,6 +73,7 @@ if (!empty(TestConfig::$config['cmFivePath'])) {
 	$output[]="INSTALLED CMFIVE";
 	$output[]="-------------------------------------------------";
 }
+
 // DUMP OUTPUT
 if (php_sapi_name() == 'cli') {
 	echo implode("\n",$output);
