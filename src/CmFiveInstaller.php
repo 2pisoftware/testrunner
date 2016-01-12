@@ -31,6 +31,7 @@ class CmFiveInstaller {
 	public function init($config) {
 		$this->config = $config;
 		if (!$this->initialised)  {
+			$_SERVER['DOCUMENT_ROOT']=$config['cmFivePath'];
 			chdir($config['cmFivePath']);
 			require_once('system'.DS.'db.php');
 			require_once('system'.DS.'web.php');
@@ -38,6 +39,11 @@ class CmFiveInstaller {
 			require_once('system'.DS.'modules'.DS.'admin'.DS.'models'.DS.'Migration.php');
 			require_once('system'.DS.'modules'.DS.'auth'.DS.'models'.DS.'User.php');
 			require_once "system/composer/vendor/autoload.php";
+			
+			$pdo = new PDO($config['driver'].":host=".$config['hostname'], $config['username'], $config['password']);
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$dbname = "`".str_replace("`","``",$config['database'])."`";
+			$pdo->query("CREATE DATABASE IF NOT EXISTS ".$dbname);
 			
 			$this->w = new Web();
 			$database = array(
@@ -48,7 +54,10 @@ class CmFiveInstaller {
 			    "driver"    => $config['driver']
 			);
 			try {
+				$dbname=$config['database'];
 	        	$this->pdo = new DbPDO(Config::get("database"));
+	        	$pdo->query("CREATE DATABASE IF NOT EXISTS $dbname");
+				$pdo->query("use $dbname");
 	    	} catch (Exception $ex) {
 	    		echo "Error: Can't connect to database.";
 	    		die();
@@ -145,7 +154,7 @@ class CmFiveInstaller {
 		try {
 			// Run migrations
 			$this->w->Migration->installInitialMigration();
-			//$this->w->Migration->runMigrations("all");
+			$this->w->Migration->runMigrations("all");
 		
 			// create admin user
 			$contact="INSERT INTO `contact` (`id`, `firstname`, `lastname`, `othername`, `title`, `homephone`, `workphone`, `mobile`, `priv_mobile`, `fax`, `email`, `notes`, `dt_created`, `dt_modified`, `is_deleted`, `private_to_user_id`, `creator_id`) VALUES

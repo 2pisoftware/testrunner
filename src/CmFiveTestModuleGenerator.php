@@ -86,7 +86,7 @@ class CmFiveTestModuleGenerator {
 
 	function createTestTemplateFiles() {
 		// prime from module template directories
-		FileSystemTools::copyRecursive(getenv('thisTestRun_testRunnerPath').'/system/modules/systestmodule','system/modules');
+		FileSystemTools::copyRecursive(getenv('thisTestRun_testRunnerPath').'/modules/systestmodule','system/modules');
 		FileSystemTools::copyRecursive(getenv('thisTestRun_testRunnerPath').'/modules/testmodule','modules');
 		
 		
