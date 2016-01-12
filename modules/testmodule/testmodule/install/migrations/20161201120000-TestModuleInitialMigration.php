@@ -24,7 +24,7 @@ class TestModuleInitialMigration extends CmfiveMigration {
 					->addColumn('d_last_known', 'date')
 					->addColumn('t_killed', 'time')
 					->addColumn('dt_born', 'datetime')
-					->addCmfiveParameters(['dt_created','creator_id','dt_modified', 'modifier_id', 'is_deleted'])
+					->addCmfiveParameters([])
 					->create();
 		}
 
