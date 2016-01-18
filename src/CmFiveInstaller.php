@@ -43,7 +43,8 @@ class CmFiveInstaller {
 			$pdo = new PDO($config['driver'].":host=".$config['hostname'], $config['username'], $config['password']);
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$dbname = "`".str_replace("`","``",$config['database'])."`";
-			$pdo->query("CREATE DATABASE IF NOT EXISTS ".$dbname);
+			$pdo->query("DROP DATABASE IF EXISTS ".$dbname);
+			$pdo->query("CREATE DATABASE".$dbname);
 			
 			$this->w = new Web();
 			$database = array(
