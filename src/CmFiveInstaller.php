@@ -43,7 +43,7 @@ class CmFiveInstaller {
 			$pdo = new PDO($config['driver'].":host=".$config['hostname'], $config['username'], $config['password']);
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$dbname = "`".str_replace("`","``",$config['database'])."`";
-			$pdo->query("CREATE DATABASE IF NOT EXISTS ".$dbname);
+			$pdo->query("DROP DATABASE IF EXISTS ".$dbname);
 			
 			$this->w = new Web();
 			$database = array(
@@ -55,10 +55,10 @@ class CmFiveInstaller {
 			);
 			try {
 				$dbname=$config['database'];
-	        	$this->pdo = new DbPDO(Config::get("database"));
-	        	$pdo->query("CREATE DATABASE IF NOT EXISTS $dbname");
+				$pdo->query("CREATE DATABASE IF NOT EXISTS $dbname");
 				$pdo->query("use $dbname");
-	    	} catch (Exception $ex) {
+				$this->pdo = new DbPDO(Config::get("database"));
+	        } catch (Exception $ex) {
 	    		echo "Error: Can't connect to database.";
 	    		die();
 	    	}
