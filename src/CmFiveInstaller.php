@@ -5,6 +5,9 @@ use Ifsnop\Mysqldump as IMysqldump;
 if (!defined('DS'))  define('DS', DIRECTORY_SEPARATOR);
 
 $testRunnerPath=dirname(dirname(__FILE__));
+require($testRunnerPath.DS.'src'.DS.'CmFiveTestModuleGenerator.php');
+require_once($testRunnerPath.DS.'src'.DS.'FileSystemTools.php');
+require_once($testRunnerPath.DS.'composer'.DS.'vendor'.DS.'autoload.php');
   
 if (php_sapi_name() == 'cli') {
 	// now we have all required parameters
@@ -139,7 +142,6 @@ class CmFiveInstaller {
 		$output[]='Install SQL';
 		// save combined sql file for running between tests
 		$sql=$this->getInstallSql($config);
-		file_put_contents('cache'.DS.'install.sql',$sql);
 		$output=array_merge($output,$this->runInstallSql($sql,$config));
 		return $output;
 	}

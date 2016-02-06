@@ -6,13 +6,13 @@ $output[]='Test Runner';
 if (!defined('DS'))  define('DS', DIRECTORY_SEPARATOR);
 
 $testRunnerPath=dirname(__FILE__);
-require($testRunnerPath.DS.'src'.DS.'FileSystemTools.php');
-require($testRunnerPath.DS.'src'.DS.'TestConfig.php');
-require($testRunnerPath.DS.'src'.DS.'TestRunner.php');
-require($testRunnerPath.DS.'src'.DS.'CmFiveInstaller.php');
-require($testRunnerPath.DS.'src'.DS.'CmFiveTestModuleGenerator.php');
+require_once($testRunnerPath.DS.'src'.DS.'FileSystemTools.php');
+require_once($testRunnerPath.DS.'src'.DS.'TestConfig.php');
+require_once($testRunnerPath.DS.'src'.DS.'TestRunner.php');
+require_once($testRunnerPath.DS.'src'.DS.'CmFiveInstaller.php');
 
-require($testRunnerPath.DS.'composer'.DS.'vendor'.DS.'autoload.php');
+
+require_once($testRunnerPath.DS.'composer'.DS.'vendor'.DS.'autoload.php');
 
 
 // overlay arguments and post variables onto configuration
