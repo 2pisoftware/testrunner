@@ -56,7 +56,7 @@ Config::set('system.rest_api_key', "<?php echo $config['rest_api_key']; ?>");
 // exclude any objects that you do NOT want available via REST
 // note: only DbObjects which have the $_rest; property are 
 // accessible via REST anyway!
-Config::set('system.rest_exclude', array(
+Config::set('system.rest_allow',array_merge((is_array(Config::get('system.rest_allow')) ? Config::get('system.rest_allow') : []), array(
     "User",
-    "Contact",
-));
+    "Contact"
+)));
