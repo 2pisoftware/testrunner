@@ -56,17 +56,6 @@ foreach (TestConfig::$config as $k=>$v) {
 }
 if (!empty(TestConfig::$config['cmFivePath'])) {
 	$output[]="-------------------------------------------------";
-	$output[]="APACHE VHOST CONFIGURATION ";
-	$output[]="-------------------------------------------------";
-	$output[]='<VirtualHost * >';
-	$output[]="ServerName  ".TestConfig::$config['testUrl'];
-	// set in CmFiveInstaller
-	$output[]="DocumentRoot ".TestConfig::$config['cmFivePath'];
-	$output[]="ErrorLog ".TestConfig::$config['testLogFiles']; 
-	$output[]='</VirtualHost>';
-	$output[]="-------------------------------------------------";
-
-
 	$installer= new CmFiveInstaller();
 	$installer->install(TestConfig::$config);
 	$output[]="-------------------------------------------------";

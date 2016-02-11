@@ -20,6 +20,8 @@ else
     rm $i
     if [ -e /var/www/projects/$repo/environment.csv ] 
     then
+		chmod -R 775 /var/www/projects/$repo
+		chown -R www-data.www-data /var/www/projects/$repo
 		echo "RUN TESTS for $repo for commiter $email" > /tmp/testrunout
 		. $TESTRUNNERPATH/setenvironment.sh $PROJECTSPATH/$repo/environment.csv  > /dev/null
 		cd $PROJECTSPATH/$repo/dev 
@@ -66,6 +68,8 @@ else
              	# rm /tmp/testmail
 		rm -rf  /var/www/projects/$repo/tests/*
 		cp -r $TESTRUNNERPATH/output/*  $PROJECTSPATH/$repo/tests/
+		chmod -R 775 /var/www/projects/$repo
+		chown -R www-data.www-data /var/www/projects/$repo		
 	fi
   done
   rm /tmp/testsrunning

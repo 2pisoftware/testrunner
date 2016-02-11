@@ -168,7 +168,6 @@ class CmFiveTestModuleGenerator {
 		file_put_contents($this->ROOT_PATH."/templates/minilayout.tpl.php",'<'.'?php '. 'echo "MINILAYOUT||"; echo !empty($body) ? $body : ""; echo "||"; ');
 		
 		
-		
 	}
 
 	/*****************************

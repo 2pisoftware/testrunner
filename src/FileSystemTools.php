@@ -6,7 +6,7 @@ require_once('lib'.DIRECTORY_SEPARATOR.'Diff.php');
 
 class FileSystemTools {
 	
-	
+	static $webServerUser='www-data';
 	
 	static function setPermissionsAllowEveryone($path) {
 	//	echo TestConfig::getConfig('testRunnerPath').DS.'fixfilepermissions.bat '.$path;
@@ -91,7 +91,7 @@ class FileSystemTools {
 	 * Recursively copy a folder to a destination path
 	 * @return Array (of copied files)
 	 *****************************/
-	static function copyRecursive( $path,$dest) {
+	static function copyRecursive( $path,$dest,$perms=null) {
 	//	echo "COPY REC ".$path." to ".$dest."\n";
 		@mkdir( $dest ,0777,true);
 		$tests=array();
@@ -106,6 +106,8 @@ class FileSystemTools {
 						FileSystemTools::copyRecursive( $path.DS.$file ,$dest.DS.$file );
 					} else {
 						copy( $path.DS.$file, $dest.DS.$file );
+						if (!empty($perms)) chmod($dest.DS.$file,$perms);
+						@chgrp($dest.DS.$file,FileSystemTools::$webServerUser);
 					}
 				}
 			}
