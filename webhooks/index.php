@@ -1,31 +1,34 @@
 <?php
-//echo "<pre>";
+if (!function_exists('getallheaders')) 
+{ 
+    function getallheaders() 
+    { 
+           $headers = ''; 
+       foreach ($_SERVER as $name => $value) 
+       { 
+           if (substr($name, 0, 5) == 'HTTP_') 
+           { 
+               $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value; 
+           } 
+       } 
+       return $headers; 
+    } 
+} 
 
-//echo "<hr>";
-//echo "<hr>";
-//echo  $_SERVER['SERVER_NAME'].' at '.date('l jS \of F Y h:i:s A',$_SERVER['REQUEST_TIME']);
-//print_r($_SERVER);
-//echo "<hr>";
-//echo "<hr>";
-//print_r($b);
-//echo "<hr>";
-//print_r($h);
-//echo "</pre>";
+@mkdir ("/tmp/docker-manager/jobs",0777,true);
 
-@mkdir ("/tmp/test/jobs",0777,true);
-$doCheckout=false;
-
-
+// DECODE THE BODY AND HEADERS FROM THE WEBHOOK
 $repo='';
 $user='';
+$gitId='';
 $b=json_decode(@file_get_contents('php://input'));
 $h=getallheaders();
 
-ob_start();	
-if (array_key_exists('X-GitHub-Event',$h) && $h['X-GitHub-Event']==='push') {
+if (array_key_exists('X-Github-Event',$h) && $h['X-Github-Event']==='push') {
 	$repo=$b->repository->name;
 	$user=$b->pusher->email;
-	$doCheckout=true;
+	$gitId=$b->after;
+	
 } else if (array_key_exists('X-Event-Key',$h) &&  $h['X-Event-Key']==='repo:push') {
 	$repo=$b->repository->name;
 	$user=''; //syntithenai@gmail.com';
@@ -34,43 +37,21 @@ if (array_key_exists('X-GitHub-Event',$h) && $h['X-GitHub-Event']==='push') {
 			foreach ($change->commits as $commit) {
 				$user=$commit->author->raw;
 			}
-			$doCheckout=true;
 		}
 	}
 } else {
-echo "not enough data to run";
+	echo "not enough data to run";
 	//readfile('hooklog.txt');
 }   
+//print_r(['REPO',$repo,'USER',$user,'git',$gitId]);
 
-print_r(['REPO',$repo,'USER',$user]);
-		
-if ($doCheckout) {
+// NOW WRITE THE JOB FILE
+if (!empty($repo) && !empty($user) && !empty($gitId))  {
 	try {
-		// git update local 
-		//require_once(__DIR__.'/Git.php');
-		//$repos = Git::open('/var/www/projects/'.$repo."/dev");
-		//echo "pull"; 
-		//print_r([$repos->pull()]);
-		// run tests by placing job file
 		$a=time();
 		sleep(1);
-		file_put_contents("/tmp/test/jobs/job".$a,$repo.'	'.$user);
+		file_put_contents("/tmp/docker-manager/jobs/job".$a,'test	'.$repo.'	'.$gitId.'	'.$user."\n");
 	} catch (Exception $e) {
 		var_dump($e);
 	}
-
 }
-//print_r($b);
-// on failure of tests send email to repository owner and 
-$content=ob_get_contents();
-ob_end_clean();
-
-file_put_contents('hooklog.txt','this is it:'.$content."\n",FILE_APPEND);
-
-
-// for log 
-//	 tail -f /var/www/projects/testrunner/webhooks/hooklog.txt & tail -f /var/log/apache2/error.log &
-// as root
-// cd /root/testrepository_bitbucket; echo "dd" >> readme.txt; git add .; git commit -m eek ; git push
-?>
-
