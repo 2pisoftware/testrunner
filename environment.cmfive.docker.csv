@@ -1,0 +1,16 @@
+dtestPath,/var/www/cmfive/system/modules/inbox
+wiki,/var/www/cmfive/modules/wiki
+inbox,/var/www/cmfive/system/modules/inbox
+all,::::/var/www/cmfive/system/modules::::
+testPath,/var/www/cmfive/system/tests
+testSuite,acceptance
+testUrl,http://cmfivecomplete
+testIncludePath,/var/www/cmfive
+testSharedSupportPath,/var/www/cmfive/system/tests/_support
+cmFivePath,/var/www/cmfive
+driver,mysql
+hostname,cmfivecomplete
+username,admin
+password,admin
+database,cmfive
+phantomjs,/usr/bin/phantomjs
