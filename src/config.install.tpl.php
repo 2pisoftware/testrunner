@@ -37,7 +37,7 @@ Config::set("system.allow_from_ip", <?php var_export($config['allow_from_ip']); 
 
 // or bypass authentication for the following modules
 Config::set("system.allow_module", array(
-    // "rest", // uncomment this to switch on REST access to the database objects. Tread with CAUTION!
+     "rest", // uncomment this to switch on REST access to the database objects. Tread with CAUTION!
 ));
 
 Config::set('system.allow_action', array(
@@ -58,5 +58,6 @@ Config::set('system.rest_api_key', "<?php echo $config['rest_api_key']; ?>");
 // accessible via REST anyway!
 Config::append('system.rest_allow',array(
     "User",
-    "Contact"
+    "Contact",
+    "WikiPage"
 ));

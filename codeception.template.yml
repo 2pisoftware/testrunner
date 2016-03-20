@@ -21,11 +21,8 @@ modules:
 extensions:
     enabled: 
         - Codeception\Extension\Logger
-        - Codeception\Extension\Phantoman
         - Codeception\Extension\Recorder
     config:
         Codeception\Extension\Recorder:
             delete_successful: false
-        Codeception\Extension\Phantoman:
-            path: \inetpub\wwwroot\testrunner\composer\bin\phantomjs
-
+            

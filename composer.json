@@ -5,9 +5,8 @@
         "bin-dir": "composer/bin"
     },
     "require": {
-        "site5/phantoman": "^1.0",
         "monolog/monolog": "^1.17",
-        "codeception/codeception": "2.1.5",
+        "codeception/codeception": "~2.1 !=2.1.5",
         "symfony/console": "^2.7",
         "symfony/yaml": "^2.7",
         "codeception/aspect-mock": "^0.5.3",

@@ -72,6 +72,7 @@ Allowed parameters include
 
 'codeception'		- command to run codeception  (DEFAULT $testRunnerPath/composer/bin/codeception)
 
+// NO LONGER RELEVANT USE DOCKER TO START WebDriver service.
 'phantomjs'			- path to phantomjs binary   (DEFAULT $testRunnerPath/composer/bin/phantomjs)
 
 'driver'			- PDO driver type for database connection (DEFAULT empty)
@@ -111,6 +112,7 @@ NOTE cmFivePath is a required configuration value.
 
 
 FAQ
+// NO LONGER RELEVANT USE DOCKER TO START WebDriver service.
 - How do I Install Phantomjs
 The windows binary for phantomjs is committed to the testrunner git repository. This is the default path so that windows users don't need to do anything.
 
