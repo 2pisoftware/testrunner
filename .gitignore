@@ -2,10 +2,8 @@ tests
 webhooks/hooklog.txt
 codeception.yml
 composer.lock
-environment.csv
 staging/
 output/
-environment.*.csv
 *.functions.txt
 phpMyAdmin/
 composerdis/
