@@ -2,7 +2,7 @@ dtestPath,/var/www/cmfive/system/modules/inbox
 wiki,/var/www/cmfive/modules/wiki
 inbox,/var/www/cmfive/system/modules/inbox
 all,::::/var/www/cmfive/system/modules::::
-testPath,/var/www/cmfive/system/tests
+testPath,/var/www/cmfive/modules/wiki
 testSuite,acceptance
 testUrl,http://cmfivecomplete
 testIncludePath,/var/www/cmfive
