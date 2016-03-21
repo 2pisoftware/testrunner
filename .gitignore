@@ -2,6 +2,8 @@ tests
 webhooks/hooklog.txt
 codeception.yml
 composer.lock
+environment.*.csv
+environment.csv
 staging/
 output/
 *.functions.txt
