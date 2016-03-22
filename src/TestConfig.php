@@ -9,7 +9,7 @@ use Symfony\Component\Yaml\Yaml;
 class TestConfig {
 	static  $config=null;
 	
-	static $legalParameters=array('testOutputPath','testStagingPath','testPath','testSuite','test','codeception','phantomjs','testIncludePath','testUrl','testLogFiles','cmFivePath','port','driver','hostname','username','password','database','coverage');
+	static $legalParameters=array('testOutputPath','testStagingPath','testPath','testSuite','test','codeception','phantomjs','testIncludePath','testUrl','testLogFiles','cmFivePath','port','driver','confighostname','hostname','username','password','database','coverage');
 	
 	public static function init() {
 		if (!is_array(self::$config)) {
@@ -47,6 +47,9 @@ class TestConfig {
 		if (strlen(trim(getenv('port')))>0)  self::$config['port']=getenv('port');
 		if (strlen(trim(getenv('driver')))>0)  self::$config['driver']=getenv('driver');
 		if (strlen(trim(getenv('hostname')))>0)  self::$config['hostname']=getenv('hostname');
+		if (strlen(trim(getenv('confighostname')))>0)  self::$config['confighostname']=getenv('confighostname');
+		// default
+		if (strlen(trim(self::$config['confighostname']))==0)  self::$config['confighostname']=self::$config['hostname'];
 		if (strlen(trim(getenv('username')))>0)  self::$config['username']=getenv('username');
 		if (strlen(trim(getenv('password')))>0)  self::$config['password']=getenv('password');
 		if (strlen(trim(getenv('database')))>0)  self::$config['database']=getenv('database');
@@ -111,7 +114,7 @@ class TestConfig {
 			// set db connection details
 			$portNumber=TestConfig::getConfig('port');
 			$port = isset($portNumber) && !empty($portNumber) ? ";port=".$portNumber : "";
-			$url = TestConfig::getConfig('driver').":host=".TestConfig::getConfig('hostname').";dbname=".TestConfig::getConfig('database').$port;
+			$url = TestConfig::getConfig('driver').":host=".TestConfig::getConfig('confighostname').";dbname=".TestConfig::getConfig('database').$port;
 			//$data['coverage']['include']=[$url];
 			//$data['coverage']['exclude']=[$url];
 			$data['modules']['config']['Db']['dsn']=$url;
@@ -143,6 +146,10 @@ class TestConfig {
 			foreach ($data['modules']['enabled'] as $k=>$moduleName) {
 				if (is_array($moduleName) && array_key_exists('WebDriver',$moduleName)) { 
 					$data['modules']['enabled'][$k]['WebDriver']['url']=(strlen(trim(TestConfig::getConfig('testUrl')))>0) ? TestConfig::getConfig('testUrl') : '';
+					$data['modules']['enabled'][$k]['WebDriver']['browser']='firefox';
+					$data['modules']['enabled'][$k]['WebDriver']['host']='selenium';
+					$data['modules']['enabled'][$k]['WebDriver']['wait']='1';
+					
 					$yaml = Yaml::dump($data);
 					file_put_contents($configFile,$yaml);
 					break;
