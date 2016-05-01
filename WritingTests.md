@@ -12,12 +12,16 @@
 **The first time this command is run it will download a ~400MB image file.**
 - Run tests by executing a bash shell(kitematic exec button then type `su`) in the docker testrunner instance and typing 
 `/runtests.sh`
+Run selections of tests by 
+`/runtests.sh  testSuite:unit`
+`/runtests.sh  testSuite:unit test:ConfigTest`
+`/runtests.sh  testSuite:unit test:ConfigTest:testFromJson`
 
 ### Create a test
 - Copy the example module tests folder to your module
 - Rename acceptance/exampleCest.php to something suitable for your module and remove the other test files.
 - Using exampleCest as a base, write a test to open the entry page to your module and click through the steps for the simplest use case.
-- Run individual tests by executing a bash shell in the docker testrunner instance and typing 
+- Run your tests by executing a bash shell in the docker testrunner instance and typing 
 `/runtests.sh testPath:<pathToYourModule> testSuite:acceptance test:<testClassName eg exampleCest>`
 
 
@@ -116,6 +120,7 @@ Bugs with selenium managing popup dialogs has led to general approach to delete 
 
 Manipulating javascript UI widgets is potentially brittle to changes and upgrades and while sometimes necessary should be approached with caution. 
 
+Sometimes asynchronous requests require the use of $I->wait to allow the UI to update before the next step in the test.
 
 ## Unit Tests
 
