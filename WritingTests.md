@@ -1,6 +1,6 @@
-! Writing Tests for CmFive with Codeception
+# Writing Tests for CmFive with Codeception
 
-!! Quickstart
+## Quickstart
 - Copy the example module tests folder to your module
 - Rename exampleCest.php to something suitable for your module and remove the other test files.
 - Using exampleCest as a base, write a test to open the entry page to your module and click through the steps for the simplest use case.
@@ -10,11 +10,11 @@ OR
 `/runtests.sh testPath:<pathToYourModule> testSuite:acceptance test`
 
 
-!! Overview
+## Overview
 To write a test for CmFive, create a php file containing tests complying with the codeception framework.
 
 Tests live in the main cmfive git repository. 
-Each module may have a tests folder containing tests. There are also tests in /system/tests.
+Each module may have a tests folder containing tests. There are also tests in /system/tests.	
 The testrunner package collates and runs tests for all modules.
 
 Acceptance tests operate on the  CmFive user interface via Selenium Webdriver and describe the actions taken by a user.
@@ -28,7 +28,7 @@ Commits to CmFive trigger automated testing with notification by email as the ea
 [Working with docker](http://codeception.com/docs/modules/WebDriver) to run a local test environment gives developers the flexibility to run individual tests.
 
 
-!! Codeception Framework
+## Codeception Framework
 
 The easiest way to setup a module for testing is to copy the tests folder from the example module and delete all the tests.
 
@@ -55,12 +55,11 @@ $name =
 `$I->assertTrue($name=='fred'`
 		
 		
-
 See the [codeception documentation](http://codeception.com/docs) for details.
 
 For acceptance testing, the [webdriver module](http://codeception.com/docs/modules/WebDriver) is most important.
 
-!! Acceptance Tests
+## Acceptance Tests
 Acceptance tests should be written to at least script a success story for using a feature.
 The return on effort diminishes with trying to cover all UI outcomes depending on the importance of the business case.
 
@@ -90,10 +89,7 @@ A Helper method that creates a record can be run iteratively over sample data fr
 
 
 
-
-
-
-!! Unit Tests
+## Unit Tests
 
 Unit tests should be written for most of the files in the models folder of a module.
 In particular Service classes should be prioritised.
