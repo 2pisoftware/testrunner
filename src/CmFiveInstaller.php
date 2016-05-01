@@ -110,7 +110,7 @@ class CmFiveInstaller {
 		$installConf['company_name']='2PI Software';
 		$installConf['company_url']='http://2pisoftware.com';
 		$installConf['timezone']='Australia/Sydney';
-		$installConf['db_hostname']=$config['confighostname'];
+		$installConf['db_hostname']=array_key_exists('hostname',$config) ? $config['hostname'] : 'localhost';
 		$installConf['db_username']=$config['username'];
 		$installConf['db_password']=$config['password'];
 		$installConf['db_database']=$config['database'];

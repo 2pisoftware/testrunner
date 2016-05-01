@@ -49,7 +49,7 @@ class TestConfig {
 		if (strlen(trim(getenv('hostname')))>0)  self::$config['hostname']=getenv('hostname');
 		if (strlen(trim(getenv('confighostname')))>0)  self::$config['confighostname']=getenv('confighostname');
 		// default
-		if (strlen(trim(self::$config['confighostname']))==0)  self::$config['confighostname']=self::$config['hostname'];
+		if (array_key_exists('confighostname',self::$config) && strlen(trim(self::$config['confighostname']))==0)  self::$config['confighostname']=self::$config['hostname'];
 		if (strlen(trim(getenv('username')))>0)  self::$config['username']=getenv('username');
 		if (strlen(trim(getenv('password')))>0)  self::$config['password']=getenv('password');
 		if (strlen(trim(getenv('database')))>0)  self::$config['database']=getenv('database');
