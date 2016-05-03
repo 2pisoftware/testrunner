@@ -3,13 +3,16 @@
 ## Quickstart
 ### Prerequisite: 
 - Install docker
+- Install the cmfive image using Kitematic.
+- Copy the www filesystem from cmfive image to your local filesystem.
+
 - Checkout https://github.com/2pisoftware/docker-cmfive 
-- In the docker-cmfive project, edit the compose/cmfive/docker-compose.yml file to change the volume mapping for www to the cmfive installation on your local host.
-`  volumes:
-    - ../../web:/var/www`
+- Run docker-cmfive/bin/dm (.bat or .sh) to see the syntax for adding an environment variable.
+- Set the web root environment variable.
+   
 - Open a Docker CLI shell and use the bin/docker-manager script (dm for short) to start a cmfive test environment
+`dm build cmfive`   !! this can be skipped and the already downloaded image will be used however the image may not be up to date with the repository Dockerfile and resources.
 `dm up cmfive mysite`  
-**The first time this command is run it will download a ~400MB image file.**
 - Run tests by executing a bash shell(kitematic exec button then type `su`) in the docker testrunner instance and typing 
 `/runtests.sh`
 Run selections of tests by 
