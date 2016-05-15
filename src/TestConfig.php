@@ -145,9 +145,9 @@ class TestConfig {
 			// && is_array($data['modules']['enabled']['WebDriver']
 			foreach ($data['modules']['enabled'] as $k=>$moduleName) {
 				if (is_array($moduleName) && array_key_exists('WebDriver',$moduleName)) { 
-					$data['modules']['enabled'][$k]['WebDriver']['url']=(strlen(trim(TestConfig::getConfig('testUrl')))>0) ? TestConfig::getConfig('testUrl') : '';
+					$data['modules']['enabled'][$k]['WebDriver']['url']=(strlen(trim(TestConfig::getConfig('testUrl')))>0) ? TestConfig::getConfig('testUrl') : 'http://localhost';
 					$data['modules']['enabled'][$k]['WebDriver']['browser']='firefox';
-					$data['modules']['enabled'][$k]['WebDriver']['host']='selenium';
+					$data['modules']['enabled'][$k]['WebDriver']['host']='localhost';
 					$data['modules']['enabled'][$k]['WebDriver']['wait']='1';
 					
 					$yaml = Yaml::dump($data);

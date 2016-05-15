@@ -20,7 +20,7 @@ class TestmoduleFoodNoLabel extends DbObject {
 		$this->_flagField=true;
 	}
 	
-	public function canView() {
+	public function canView(User $user) {
 		return false;
 	}
 

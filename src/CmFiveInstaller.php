@@ -47,7 +47,6 @@ class CmFiveInstaller {
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$dbname = "`".str_replace("`","``",$config['database'])."`";
 			$pdo->query("DROP DATABASE IF EXISTS ".$dbname);
-			
 			$this->w = new Web();
 			$database = array(
 			    "hostname"  => $config['hostname'],
@@ -59,10 +58,12 @@ class CmFiveInstaller {
 			try {
 				$dbname=$config['database'];
 				$pdo->query("CREATE DATABASE IF NOT EXISTS $dbname");
+				
 				$pdo->query("use $dbname");
-				$this->pdo = new DbPDO(Config::get("database"));
-	        } catch (Exception $ex) {
-	    		echo "Error: Can't connect to database.";
+				$this->pdo = new DbPDO($database);
+			} catch (Exception $ex) {
+	    		echo "Error: Can't connect to database.".$ex->getMessage();
+	    		print_r($database);
 	    		die();
 	    	}
 	    	$this->w->db = $this->pdo;
@@ -157,7 +158,10 @@ class CmFiveInstaller {
 			// Run migrations
 			$this->w->Migration->installInitialMigration();
 			$this->w->Migration->runMigrations("all");
-		
+		} catch (\Exception $e) {
+		    echo 'migrations error: ' . $e->getMessage();
+		}
+		try {
 			// create admin user
 			$contact="INSERT INTO `contact` (`id`, `firstname`, `lastname`, `othername`, `title`, `homephone`, `workphone`, `mobile`, `priv_mobile`, `fax`, `email`, `notes`, `dt_created`, `dt_modified`, `is_deleted`, `private_to_user_id`, `creator_id`) VALUES
 	(1, 'Administrator', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'admin@tripleacs.com', NULL, '2012-04-27 06:31:52', '0000-00-00 00:00:00', 0, NULL, NULL);";
@@ -170,10 +174,17 @@ class CmFiveInstaller {
 			self::runSql($this->pdo,$contact);
 			self::runSql($this->pdo,$user);
 			self::runSql($this->pdo,$role);
-		
+		} catch (\Exception $e) {
+		    echo 'mysql user patch error: ' . $e->getMessage();
+		}
+		try {
 			// now dump database
 			$dump = new IMysqldump\Mysqldump('mysql:host='.$config['hostname'].';dbname='.$config['database'], $config['username'], $config['password'],['add-drop-table'=>'true']);
 			$dump->start('cache/install.sql');
+			#$exec='mysql -u '.$config['username'].' -p'.$config['password'].' -h '.$config['hostname'].' --add-drop-table '.$config['database'].' > '.$config['cmFivePath'].'/cache/install.sql';
+			//echo "CONNECTsss";
+			#echo $exec;
+			#exec($exec);
 		} catch (\Exception $e) {
 		    echo 'mysqldump-php error: ' . $e->getMessage();
 		}
