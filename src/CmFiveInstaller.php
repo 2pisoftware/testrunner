@@ -174,7 +174,7 @@ class CmFiveInstaller {
 	 */
 	public function updateComposerJSON() {
 		require_once $this->config['cmFivePath'].'/system/modules/admin/actions/composer.php';
-		composer_ALL($web);
+		composer_ALL($this->web);
 	}
 	
 	/**
