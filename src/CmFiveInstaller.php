@@ -181,7 +181,7 @@ class CmFiveInstaller {
 	 * Run the composer update
 	 */
 	public function updateComposer() {
-		chdir(require_once $this->config['cmFivePath'].'/system');
+		chdir($this->config['cmFivePath'].'/system');
 		exec('php composer.phar update');
 
 	}
