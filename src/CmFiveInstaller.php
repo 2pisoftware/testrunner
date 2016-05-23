@@ -139,12 +139,51 @@ class CmFiveInstaller {
 		$gen->createTestTemplateFiles();
 		// cleanup
 		register_shutdown_function([&$gen,'removeTestTemplateFiles']);
-		
+		$output[]='Created Test Modules';
+		// chmod and chown $this->config['cmFivePath']
+		// mkdir /storage/logs,backups,session
+		if (!file_exists($this->config['cmFivePath'].DS."storage")) {
+			mkdir($this->config['cmFivePath'].DS."storage");
+		}
+		if (!file_exists($this->config['cmFivePath'].DS."storage".DS."logs")) {
+			mkdir($this->config['cmFivePath'].DS."storage".DS."logs");
+		}
+		if (!file_exists($this->config['cmFivePath'].DS."storage".DS."backups")) {
+			mkdir($this->config['cmFivePath'].DS."storage".DS."backups");
+		}
+		if (!file_exists($this->config['cmFivePath'].DS."storage".DS."session")) {
+			mkdir($this->config['cmFivePath'].DS."storage".DS."session");
+		}
+		chmod($this->config['cmFivePath'], 0755);
+		chown($this->config['cmFivePath'], "www-data");
+		$output[]='Created necessary folders and set file permissions';
+		$output[]='Composer generate';
+		//$this->updateComposerJSON();
+		$output[]='Composer update';
+		//$this->updateComposer();
+		$output[]='Composer DONE';
 		$output[]='Install SQL';
 		// save combined sql file for running between tests
 		$sql=$this->getInstallSql($config);
 		$output=array_merge($output,$this->runInstallSql($sql,$config));
+		$output[]='Installed SQL';
 		return $output;
+	}
+	/**
+	 * Run the composer update script to generate composer.json for modules
+	 */
+	public function updateComposerJSON() {
+		require_once $this->config['cmFivePath'].'/system/modules/admin/actions/composer.php';
+		composer_ALL($web);
+	}
+	
+	/**
+	 * Run the composer update
+	 */
+	public function updateComposer() {
+		chdir(require_once $this->config['cmFivePath'].'/system');
+		exec('php composer.phar update');
+
 	}
 	
 	/*****************************************************
