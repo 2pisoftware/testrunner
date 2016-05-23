@@ -183,6 +183,7 @@ class CmFiveInstaller {
 	 */
 	public function updateComposer() {
 		//chdir($this->config['cmFivePath'].'/system');
+		putenv('HOME=/var/www');
 		exec('cd '.$this->config['cmFivePath'].'/system; export HOME=/var/www; php composer.phar update');
 
 	}
