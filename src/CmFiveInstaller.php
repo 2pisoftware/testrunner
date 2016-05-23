@@ -158,9 +158,9 @@ class CmFiveInstaller {
 		chown($this->config['cmFivePath'], "www-data");
 		$output[]='Created necessary folders and set file permissions';
 		$output[]='Composer generate';
-		//$this->updateComposerJSON();
+		$this->updateComposerJSON();
 		$output[]='Composer update';
-		//$this->updateComposer();
+		$this->updateComposer();
 		$output[]='Composer DONE';
 		$output[]='Install SQL';
 		// save combined sql file for running between tests
