@@ -57,7 +57,7 @@ foreach (TestConfig::$config as $k=>$v) {
 if (!empty(TestConfig::$config['cmFivePath'])) {
 	$output[]="-------------------------------------------------";
 	$installer= new CmFiveInstaller();
-	$installer->install(TestConfig::$config);
+	$output=array_merge($output,$installer->install(TestConfig::$config));
 	$output[]="-------------------------------------------------";
 	$output[]="INSTALLED CMFIVE";
 	$output[]="-------------------------------------------------";

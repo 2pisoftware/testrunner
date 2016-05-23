@@ -9,7 +9,7 @@ use Symfony\Component\Yaml\Yaml;
 class TestConfig {
 	static  $config=null;
 	
-	static $legalParameters=array('testOutputPath','testStagingPath','testPath','testSuite','test','codeception','phantomjs','testIncludePath','testUrl','testLogFiles','cmFivePath','port','driver','confighostname','hostname','username','password','database','coverage');
+	static $legalParameters=array('testOutputPath','testStagingPath','testPath','testSuite','test','codeception','phantomjs','testIncludePath','testUrl','testLogFiles','cmFivePath','port','driver','confighostname','hostname','username','password','database','coverage','composer');
 	
 	public static function init() {
 		if (!is_array(self::$config)) {

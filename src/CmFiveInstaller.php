@@ -157,15 +157,16 @@ class CmFiveInstaller {
 		chmod($this->config['cmFivePath'], 0755);
 		chown($this->config['cmFivePath'], "www-data");
 		$output[]='Created necessary folders and set file permissions';
-		$output[]='Composer generate';
-		$this->updateComposerJSON();
-		$output[]='Composer update';
-		$this->updateComposer();
-		$output[]='Composer DONE';
-		$output[]='Install SQL';
+		if ($this->config['composer']!='no') {
+			$output[]='Composer generate';
+			$this->updateComposerJSON();
+			$output[]='Composer update';
+			$this->updateComposer();
+			$output[]='Composer DONE';
+		}
 		// save combined sql file for running between tests
 		$sql=$this->getInstallSql($config);
-		$output=array_merge($output,$this->runInstallSql($sql,$config));
+		$this->runInstallSql($sql,$config);
 		$output[]='Installed SQL';
 		return $output;
 	}
