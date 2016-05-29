@@ -28,7 +28,8 @@ Config::set('email', array(
     "password"	=> "<?php echo $config['email_password']; ?>"
 ));
 
-Config::set("system.checkCSRF", <?php echo $config['checkCSRF'] ? 'true' : 'false'; ?>);
+Config::set("system.checkCSRF", false);
+Config::set("system.csrf.enabled", false);
 
 //========= Anonymous Access ================================
 
@@ -38,6 +39,7 @@ Config::set("system.allow_from_ip", <?php var_export($config['allow_from_ip']); 
 // or bypass authentication for the following modules
 Config::set("system.allow_module", array(
      "rest", // uncomment this to switch on REST access to the database objects. Tread with CAUTION!
+     "webdav"
 ));
 
 Config::set('system.allow_action', array(
