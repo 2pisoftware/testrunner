@@ -133,7 +133,9 @@ class CmFiveInstaller {
 		$output=[];
 		$output[]='cmFive Installer';
 		$output[]='Write config.php';
-		$this->installConfigFile($config);
+		if (empty($config['skipInstallConfigFile']) || !$config['skipInstallConfigFile']) {
+			$this->installConfigFile($config);
+		}
 		// write testing modules to filesystem
 		$gen=new CmFiveTestModuleGenerator($config['cmFivePath']);
 		$gen->createTestTemplateFiles();

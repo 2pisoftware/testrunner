@@ -54,7 +54,7 @@ $output[]="-------------------------------------------------";
 foreach (TestConfig::$config as $k=>$v) {
 	$output[]=$k."=".$v;
 }
-if (!empty(TestConfig::$config['cmFivePath'])) {
+if (if ((empty(TestConfig::$config['skipInstall']) || !$config['skipInstall']) && !empty(TestConfig::$config['cmFivePath'])) {
 	$output[]="-------------------------------------------------";
 	$installer= new CmFiveInstaller();
 	$output=array_merge($output,$installer->install(TestConfig::$config));
@@ -110,7 +110,6 @@ foreach( $testFolders as $key=>$folder) {
 				$output=array_merge($output,$lines);
 				$output[]="-------------------------------------------------";
 			}
-
 		}
 	}
 	if (php_sapi_name() == 'cli') {
