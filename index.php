@@ -55,7 +55,7 @@ foreach (TestConfig::$config as $k=>$v) {
 	$output[]=$k."=".$v;
 }
 if (
-	(empty(TestConfig::$config['skipInstall']) || !$config['skipInstall'])
+	(empty(TestConfig::$config['skipInstall']) || !$config['skipInstall']==='true')
 	 && !empty(TestConfig::$config['cmFivePath'])) {
 	$output[]="-------------------------------------------------";
 	$installer= new CmFiveInstaller();
