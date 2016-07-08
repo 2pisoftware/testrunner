@@ -159,7 +159,7 @@ class CmFiveInstaller {
 		chmod($this->config['cmFivePath'], 0755);
 		chown($this->config['cmFivePath'], "www-data");
 		$output[]='Created necessary folders and set file permissions';
-		if (empty($this->config['skipComposer']) $this->config['skipComposer']==='true' ) {
+		if (empty($this->config['skipComposer']) || $this->config['skipComposer']==='true' ) {
 			$output[]='Composer generate';
 			$this->updateComposerJSON();
 			$output[]='Composer update';
