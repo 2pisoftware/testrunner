@@ -132,8 +132,8 @@ class CmFiveInstaller {
 	public function install($config) {
 		$output=[];
 		$output[]='cmFive Installer';
-		$output[]='Write config.php';
 		if (!($config['skipInstallConfigFile']==="true" )) {
+			$output[]='Write config.php';
 			$this->installConfigFile($config);
 		}
 		// write testing modules to filesystem
