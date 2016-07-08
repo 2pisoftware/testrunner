@@ -75,7 +75,7 @@ class CmFiveInstaller {
 
 	public static function findConfig($arguments) {
 		$errors=[];
-		$legalParameters=['cmFivePath','port','driver','hostname','username','password','database','skipComposer'];
+		$legalParameters=['cmFivePath','port','driver','hostname','username','password','database','skipComposer','skipInstallConfigFile'];
 		$requiredParameters=['cmFivePath','database'];
 		$defaultParameters=['port'=>'','driver'=>'mysql','hostname'=>'localhost','username'=>'root','password'=>'','adminUsername'=>'admin','adminPassword'=>'admin','adminFirstName'=>'Admin','adminLastName'=>'User','adminEmail'=>'admin@here.com'];
 		$config=$defaultParameters;
@@ -133,7 +133,7 @@ class CmFiveInstaller {
 		$output=[];
 		$output[]='cmFive Installer';
 		$output[]='Write config.php';
-		if (empty($config['skipInstallConfigFile']) || $config['skipInstallConfigFile']==='true' ) {
+		if (!($config['skipInstallConfigFile']==="true" )) {
 			$this->installConfigFile($config);
 		}
 		// write testing modules to filesystem
@@ -159,7 +159,7 @@ class CmFiveInstaller {
 		chmod($this->config['cmFivePath'], 0755);
 		chown($this->config['cmFivePath'], "www-data");
 		$output[]='Created necessary folders and set file permissions';
-		if (empty($this->config['skipComposer']) || $this->config['skipComposer']!=='true' ) {
+		if (!($this->config['skipComposer']==="true") ) {
 			$output[]='Composer generate';
 			$this->updateComposerJSON();
 			$output[]='Composer update';

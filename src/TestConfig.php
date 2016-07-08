@@ -9,7 +9,7 @@ use Symfony\Component\Yaml\Yaml;
 class TestConfig {
 	static  $config=null;
 	
-	static $legalParameters=array('testOutputPath','testStagingPath','testPath','testSuite','test','codeception','phantomjs','testIncludePath','testUrl','testLogFiles','cmFivePath','port','driver','confighostname','hostname','username','password','database','coverage','composer');
+	static $legalParameters=array('testOutputPath','testStagingPath','testPath','testSuite','test','codeception','phantomjs','testIncludePath','testUrl','testLogFiles','cmFivePath','port','driver','confighostname','hostname','username','password','database','coverage','skipComposer','skipInstall','skipInstallConfigFile');
 	
 	public static function init() {
 		if (!is_array(self::$config)) {
@@ -63,6 +63,10 @@ class TestConfig {
 		if (strlen(trim(getenv('testOutputPath')))>0)  self::$config['testOutputPath']=getenv('testOutputPath');
 		if (strlen(trim(getenv('codeception')))>0)  self::$config['codeception']=getenv('codeception');
 		if (strlen(trim(getenv('phantomjs')))>0)  self::$config['phantomjs']=getenv('phantomjs');
+		
+		if (strlen(trim(getenv('skipComposer')))>0)  self::$config['skipComposer']=getenv('skipComposer');
+		if (strlen(trim(getenv('skipInstall')))>0)  self::$config['skipInstall']=getenv('skipInstall');
+		if (strlen(trim(getenv('skipInstallConfigFile')))>0)  self::$config['skipInstallConfigFile']=getenv('skipInstallConfigFile');
 		//print_r(self::$config);
 		//die();
 	}
