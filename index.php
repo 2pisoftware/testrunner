@@ -98,15 +98,19 @@ foreach( $testFolders as $key=>$folder) {
 		}
 	}
 	// run the test
-	$output[]='RUN TESTS '.$folder;
+	echo 'RUN TESTS '.$folder;
+	ob_start();
 	$testResult=TestRunner::runTests($folder);
+	$testOutput=ob_get_contents();
+	ob_end_clean();
 	if (!$testResult['result'])  {
 		$passedAllTests=false;
 		$output[] = "TEST FAILED";
 	} else {
 		$output[] = "TEST PASSED";
 	}
-	$output=array_merge($output,$testResult['output']);
+	$output[]=$testOutput;
+	//$output=array_merge($output,$testResult['output']);
 	// CHECK PHP LOG FILE
 	if (!empty(TestConfig::getConfig('testLogFiles'))) {
 		foreach (explode(",",TestConfig::getConfig('testLogFiles')) as $k => $logFile) {
