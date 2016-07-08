@@ -11,7 +11,7 @@ require_once($testRunnerPath.DS.'src'.DS.'TestConfig.php');
 require_once($testRunnerPath.DS.'src'.DS.'TestRunner.php');
 require_once($testRunnerPath.DS.'src'.DS.'CmFiveInstaller.php');
 
-
+ 
 require_once($testRunnerPath.DS.'composer'.DS.'vendor'.DS.'autoload.php');
 
 
@@ -54,7 +54,9 @@ $output[]="-------------------------------------------------";
 foreach (TestConfig::$config as $k=>$v) {
 	$output[]=$k."=".$v;
 }
-if (if ((empty(TestConfig::$config['skipInstall']) || !$config['skipInstall']) && !empty(TestConfig::$config['cmFivePath'])) {
+if (
+	(empty(TestConfig::$config['skipInstall']) || !$config['skipInstall'])
+	 && !empty(TestConfig::$config['cmFivePath'])) {
 	$output[]="-------------------------------------------------";
 	$installer= new CmFiveInstaller();
 	$output=array_merge($output,$installer->install(TestConfig::$config));
