@@ -75,7 +75,7 @@ class CmFiveInstaller {
 
 	public static function findConfig($arguments) {
 		$errors=[];
-		$legalParameters=['cmFivePath','port','driver','hostname','username','password','database'];
+		$legalParameters=['cmFivePath','port','driver','hostname','username','password','database','skipComposer'];
 		$requiredParameters=['cmFivePath','database'];
 		$defaultParameters=['port'=>'','driver'=>'mysql','hostname'=>'localhost','username'=>'root','password'=>'','adminUsername'=>'admin','adminPassword'=>'admin','adminFirstName'=>'Admin','adminLastName'=>'User','adminEmail'=>'admin@here.com'];
 		$config=$defaultParameters;
@@ -159,7 +159,7 @@ class CmFiveInstaller {
 		chmod($this->config['cmFivePath'], 0755);
 		chown($this->config['cmFivePath'], "www-data");
 		$output[]='Created necessary folders and set file permissions';
-		if (empty($this->config['skipComposer']) || $this->config['skipComposer']==='true' ) {
+		if (empty($this->config['skipComposer']) || $this->config['skipComposer']!=='true' ) {
 			$output[]='Composer generate';
 			$this->updateComposerJSON();
 			$output[]='Composer update';
@@ -288,7 +288,7 @@ class CmFiveInstaller {
 		// clear the config cache
 		if (file_exists('cache'.DIRECTORY_SEPARATOR.'config.cache')) unlink('cache'.DIRECTORY_SEPARATOR.'config.cache');
 		return file_put_contents("config.php", "<?php\n\n" .$result_config);
-	}
+	} 
 	
 
 }	
