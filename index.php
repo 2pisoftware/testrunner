@@ -98,8 +98,14 @@ foreach( $testFolders as $key=>$folder) {
 		}
 	}
 	// run the test
+	$output[]='RUN TESTS '.$folder;
 	$testResult=TestRunner::runTests($folder);
-	if (!$testResult['result'])  $passedAllTests=false;
+	if (!$testResult['result'])  {
+		$passedAllTests=false;
+		$output[] = "TEST FAILED";
+	} else {
+		$output[] = "TEST PASSED";
+	}
 	$output=array_merge($output,$testResult['output']);
 	// CHECK PHP LOG FILE
 	if (!empty(TestConfig::getConfig('testLogFiles'))) {
